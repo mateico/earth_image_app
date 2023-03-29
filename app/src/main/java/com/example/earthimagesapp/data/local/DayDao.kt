@@ -12,7 +12,7 @@ interface DayDao {
     suspend fun insertDayListing(DayEntity: List<DayEntity>)
 
     @Query("SELECT * FROM dayentity")
-    suspend fun getProductListing(): List<DayEntity>
+    suspend fun getDayListing(): List<DayEntity>
 
 
 }

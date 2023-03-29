@@ -9,5 +9,5 @@ import androidx.room.RoomDatabase
 )
 
 abstract class EarthImagesDatabase: RoomDatabase() {
-    abstract val dao: DayDao
+    abstract val dayDao: DayDao
 }
