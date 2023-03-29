@@ -73,7 +73,7 @@ class DayListingsViewModel @Inject constructor(
         Timber.d("getting images")
         viewModelScope.launch {
             repository
-                .getImageByDay()
+                .getImageByDay(false)
                 .collect { result ->
                     when (result) {
                         is Resource.Success -> {

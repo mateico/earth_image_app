@@ -1,4 +1,4 @@
-package com.example.earthimagesapp.presentation.day_listing
+package com.example.earthimagesapp.presentation.photo_listing
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,9 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-
 import androidx.navigation.NavController
-import com.example.earthimagesapp.presentation.Screen
+import com.example.earthimagesapp.presentation.day_listing.DayItem
+import com.example.earthimagesapp.presentation.day_listing.DayListingsEvent
+import com.example.earthimagesapp.presentation.day_listing.DayListingsViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -19,11 +20,9 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-@RootNavGraph(start = true)
 @Destination
-fun DayListingScreen(
-    viewModel: DayListingsViewModel = hiltViewModel(),
-    navController: NavController
+fun ImageListingScreen(
+    viewModel: ImageListingsViewModel = hiltViewModel(),
 ) {
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = viewModel.state.isRefreshing)
@@ -33,26 +32,26 @@ fun DayListingScreen(
         content = { innerPadding ->
             SwipeRefresh(
                 state = swipeRefreshState,
-                onRefresh = { viewModel.onEvent(DayListingsEvent.Refresh) }
+                onRefresh = { Unit }
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(state.days.size) { i ->
-                        val day = state.days[i]
-                        DayItem(
-                            day = day,
+                    items(state.images.size) { i ->
+                        val image = state.images[i]
+                        ImageItem(
+                            image = image,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
 
                         ) {
-                            navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
+                            //navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
                         }
                     }
                 }
             }
-            if (state.errorMessage != null) {
+          /*  if (state.errorMessage != null) {
                 Snackbar(
                     action = {
                         Button(onClick = {
@@ -63,9 +62,7 @@ fun DayListingScreen(
                     },
                     modifier = Modifier.padding(16.dp)
                 ) { Text(text = state.errorMessage) }
-            }
+            }*/
         }
     )
 }
-
-

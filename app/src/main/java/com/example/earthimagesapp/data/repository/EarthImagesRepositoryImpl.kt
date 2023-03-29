@@ -64,7 +64,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getImageByDay(): Flow<Resource<List<ImageData>>> {
+    override suspend fun getImageByDay(fetchFromLocal: Boolean): Flow<Resource<List<ImageData>>> {
         return flow {
 
             emit(Resource.Loading(true))
@@ -74,6 +74,11 @@ class EarthImagesRepositoryImpl @Inject constructor(
             emit(Resource.Success(
                 data = localImagesByDayListing.map { it.toImageData() }
             ))
+
+            if (fetchFromLocal) {
+                emit(Resource.Loading(false))
+                return@flow
+            }
 
             val remoteImagesByDayListings = try {
                 api.getImagesData("date/2018-06-01")

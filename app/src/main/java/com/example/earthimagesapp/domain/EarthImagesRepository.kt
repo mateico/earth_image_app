@@ -10,7 +10,7 @@ interface EarthImagesRepository {
 
     suspend fun getDays(): Flow<Resource<List<Day>>>
 
-    suspend fun getImageByDay(): Flow<Resource<List<ImageData>>>
+    suspend fun getImageByDay(fetchFromLocal: Boolean): Flow<Resource<List<ImageData>>>
 
     suspend fun insertDays(products: List<Day>)
 
