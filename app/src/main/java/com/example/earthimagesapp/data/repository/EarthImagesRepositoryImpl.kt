@@ -112,6 +112,19 @@ class EarthImagesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPhotoDataById(id: String): Flow<Resource<ImageData>> {
+        return flow {
+            val localImage = imageDataDao.getImageById(id)
+
+            emit(Resource.Success(
+                data = localImage.toImageData()
+            ))
+
+            emit(Resource.Loading(false))
+            return@flow
+        }
+    }
+
     override suspend fun insertDays(days: List<Day>) {
         dayDao.insertDayListing(
             days.map { it.toDayEntity() }

@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface ImageDataDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertImagesByDayListing(DayEntity: List<ImageDataEntity>)
 
     @Query(
@@ -19,4 +19,7 @@ interface ImageDataDao {
         """
     )
     suspend fun getImagesByDayListing(date: String): List<ImageDataEntity>
+
+    @Query("SELECT * FROM imagedataentity WHERE identifier = :id")
+    suspend fun getImageById(id: String): ImageDataEntity
 }

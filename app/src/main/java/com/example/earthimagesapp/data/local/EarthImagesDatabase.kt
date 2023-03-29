@@ -8,7 +8,7 @@ import com.example.earthimagesapp.data.remote.dto.ImageDataDto
     entities = [
         DayEntity::class,
         ImageDataEntity::class],
-    version = 5
+    version = 7
 )
 
 abstract class EarthImagesDatabase: RoomDatabase() {

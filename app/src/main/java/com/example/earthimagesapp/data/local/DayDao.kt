@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface DayDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDayListing(DayEntity: List<DayEntity>)
 
     @Query("SELECT * FROM dayentity")
