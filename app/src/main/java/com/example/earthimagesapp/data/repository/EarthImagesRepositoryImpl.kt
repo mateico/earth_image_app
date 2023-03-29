@@ -22,7 +22,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
     private val dayDao = db.dayDao
 
-    override suspend fun getDays(fetchFromRemote: Boolean): Flow<Resource<List<Day>>> {
+    override suspend fun getDays(): Flow<Resource<List<Day>>> {
         return flow {
 
             emit(Resource.Loading(true))

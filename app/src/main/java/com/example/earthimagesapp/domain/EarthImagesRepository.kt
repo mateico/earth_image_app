@@ -6,9 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface EarthImagesRepository {
 
-    suspend fun getDays(
-        fetchFromRemote: Boolean
-    ): Flow<Resource<List<Day>>>
+    suspend fun getDays(): Flow<Resource<List<Day>>>
 
     suspend fun insertDays(products: List<Day>)
 

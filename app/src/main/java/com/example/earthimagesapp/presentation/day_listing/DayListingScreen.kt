@@ -28,6 +28,44 @@ fun DayListingScreen(
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = viewModel.state.isRefreshing)
     val state = viewModel.state
+
+    Scaffold(
+        content = { innerPadding ->
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = { viewModel.onEvent(DayListingsEvent.Refresh) }
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(state.days.size) { i ->
+                        val day = state.days[i]
+                        DayItem(
+                            day = day,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+
+                        ) {
+                            //navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
+                        }
+                    }
+                }
+            }
+            if (state.errorMessage != null) {
+                Snackbar(
+                    action = {
+                        Button(onClick = {
+                            viewModel.onEvent(DayListingsEvent.CloseErrorMessage)
+                        }) {
+                            Text("Close")
+                        }
+                    },
+                    modifier = Modifier.padding(16.dp)
+                ) { Text(text = state.errorMessage) }
+            }
+        }
+    )
 }
 
 
