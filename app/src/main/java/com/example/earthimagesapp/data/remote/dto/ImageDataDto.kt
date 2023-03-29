@@ -8,7 +8,7 @@ data class ImageDataDto(
     val date: String,
     val identifier: String,
     val image: String,
-    val version: String
+    val version: String?
 ) {
     fun toImageDataEntity(): ImageDataEntity {
         return ImageDataEntity(

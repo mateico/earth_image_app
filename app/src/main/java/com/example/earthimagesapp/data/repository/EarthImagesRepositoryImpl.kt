@@ -5,6 +5,7 @@ import com.example.earthimagesapp.data.mapper.toDay
 import com.example.earthimagesapp.data.mapper.toDayEntity
 import com.example.earthimagesapp.data.mapper.toImageData
 import com.example.earthimagesapp.data.remote.EarthImagesApi
+import com.example.earthimagesapp.data.remote.dto.DayDto
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
@@ -25,6 +26,9 @@ class EarthImagesRepositoryImpl @Inject constructor(
     private val dayDao = db.dayDao
     private val imageDataDao = db.imageDataDao
 
+    var counter = 0
+    private var remoteDayListings: List<DayDto>? = emptyList()
+
     override suspend fun getDays(): Flow<Resource<List<Day>>> {
         return flow {
 
@@ -35,7 +39,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
                 data = localDayListing.map { it.toDay() }
             ))
 
-            val remoteDayListings = try {
+            remoteDayListings = try {
                 api.getDays()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -61,40 +65,26 @@ class EarthImagesRepositoryImpl @Inject constructor(
                     data = dayDao.getDayListing().map { it.toDay() }
                 ))
 
+                // get all Images iterating by day
+                getImageByDayFromRemote(dayListings[counter].date)
+
             }
 
         }
     }
 
-    override suspend fun getImageByDay(fetchFromLocal: Boolean, day: String): Flow<Resource<List<ImageData>>> {
-        return flow {
-
-            emit(Resource.Loading(true))
-
-            val localImagesByDayListing = imageDataDao.getImagesByDayListing(day)
-
-            emit(Resource.Success(
-                data = localImagesByDayListing.map { it.toImageData() }
-            ))
-
-            if (fetchFromLocal) {
-                emit(Resource.Loading(false))
-                return@flow
-            }
+    override suspend fun getImageByDayFromRemote(day: String) {
 
             val remoteImagesByDayListings = try {
                 api.getImagesData("date/$day")
             } catch (e: IOException) {
                 e.printStackTrace()
-                emit(Resource.Error("Please check your network connection"))
                 null
             } catch (e: HttpException) {
                 e.printStackTrace()
-                emit(Resource.Error("Something went wrong"))
                 null
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(Resource.Error("Something went wrong"))
                 null
             }
 
@@ -103,11 +93,22 @@ class EarthImagesRepositoryImpl @Inject constructor(
                     imageByDayListings.map { it.toImageDataEntity() }
                 )
 
-                emit(Resource.Success(
-                    data = imageDataDao.getImagesByDayListing(day).map { it.toImageData() }
-                ))
+                remoteDayListings?.get(++counter)?.let { getImageByDayFromRemote(it.date) }
             }
 
+    }
+
+    override suspend fun getImageByDayFromLocal(day: String): Flow<Resource<List<ImageData>>> {
+
+        return flow {
+            val localImagesByDayListing = imageDataDao.getImagesByDayListing(day)
+
+            emit(Resource.Success(
+                data = localImagesByDayListing.map { it.toImageData() }
+            ))
+
+            emit(Resource.Loading(false))
+            return@flow
         }
     }
 

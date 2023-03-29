@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface ImageDataDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertImagesByDayListing(DayEntity: List<ImageDataEntity>)
 
     @Query(

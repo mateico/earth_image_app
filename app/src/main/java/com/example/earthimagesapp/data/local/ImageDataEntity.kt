@@ -9,5 +9,5 @@ data class ImageDataEntity(
     val date: String,
     @PrimaryKey val identifier: String,
     val image: String,
-    val version: String
+    val version: String?
 )

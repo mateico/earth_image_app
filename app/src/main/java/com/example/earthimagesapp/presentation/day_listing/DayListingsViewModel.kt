@@ -21,7 +21,7 @@ class DayListingsViewModel @Inject constructor(
 
     init {
         getDayListings()
-        getImageByDateListing("2023-03-14")
+        //getImageByDateListing("2023-03-14")
     }
 
     fun onEvent(event: DayListingsEvent) {
@@ -69,11 +69,11 @@ class DayListingsViewModel @Inject constructor(
         }
     }
 
-    fun getImageByDateListing(day: String) {
+   /* fun getImageByDateListing(day: String) {
         Timber.d("getting images")
         viewModelScope.launch {
             repository
-                .getImageByDay(false, day)
+                .getImageByDayFromRemote(day)
                 .collect { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -96,6 +96,6 @@ class DayListingsViewModel @Inject constructor(
                     }
                 }
         }
-    }
+    }*/
 
 }
