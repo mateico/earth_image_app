@@ -52,6 +52,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
             }
 
             remoteDayListings?.let { dayListings ->
+
                 dayDao.insertDayListing(
                     dayListings.map { it.toDayEntity() }
                 )
@@ -59,17 +60,18 @@ class EarthImagesRepositoryImpl @Inject constructor(
                 emit(Resource.Success(
                     data = dayDao.getDayListing().map { it.toDay() }
                 ))
+
             }
 
         }
     }
 
-    override suspend fun getImageByDay(fetchFromLocal: Boolean): Flow<Resource<List<ImageData>>> {
+    override suspend fun getImageByDay(fetchFromLocal: Boolean, day: String): Flow<Resource<List<ImageData>>> {
         return flow {
 
             emit(Resource.Loading(true))
 
-            val localImagesByDayListing = imageDataDao.getImagesByDayListing()
+            val localImagesByDayListing = imageDataDao.getImagesByDayListing(day)
 
             emit(Resource.Success(
                 data = localImagesByDayListing.map { it.toImageData() }
@@ -81,7 +83,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
             }
 
             val remoteImagesByDayListings = try {
-                api.getImagesData("date/2018-06-01")
+                api.getImagesData("date/$day")
             } catch (e: IOException) {
                 e.printStackTrace()
                 emit(Resource.Error("Please check your network connection"))
@@ -102,7 +104,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
                 )
 
                 emit(Resource.Success(
-                    data = imageDataDao.getImagesByDayListing().map { it.toImageData() }
+                    data = imageDataDao.getImagesByDayListing(day).map { it.toImageData() }
                 ))
             }
 

@@ -30,7 +30,7 @@ class ImageListingsViewModel @Inject constructor(
         viewModelScope.launch {
             val day = savedStateHandle.get<String>("day") ?: return@launch
             repository
-                .getImageByDay(true)
+                .getImageByDay(true, day)
                 .collect { result ->
                     when (result) {
                         is Resource.Success -> {
