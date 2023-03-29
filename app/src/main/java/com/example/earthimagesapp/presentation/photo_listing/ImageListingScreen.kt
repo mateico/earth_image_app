@@ -1,18 +1,31 @@
 package com.example.earthimagesapp.presentation.photo_listing
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.earthimagesapp.presentation.day_listing.DayItem
 import com.example.earthimagesapp.presentation.day_listing.DayListingsEvent
 import com.example.earthimagesapp.presentation.day_listing.DayListingsViewModel
+import com.example.earthimagesapp.util.DateUtils
+import com.example.earthimagesapplication.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -25,10 +38,41 @@ fun ImageListingScreen(
     viewModel: ImageListingsViewModel = hiltViewModel(),
 ) {
 
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = viewModel.state.isRefreshing)
     val state = viewModel.state
 
-    Scaffold(
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(150.dp), content = {
+        items(state.images.size) { i ->
+            val image = state.images[i]
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(Color.Gray),
+                contentAlignment = Alignment.Center
+            ) {
+
+
+
+                AsyncImage(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(200.dp),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(R.drawable.placeholder),
+                    contentDescription = "This is the description",
+                    contentScale = ContentScale.Crop
+
+                )
+
+            }
+        }
+    })
+    /*Scaffold(
         content = { innerPadding ->
             SwipeRefresh(
                 state = swipeRefreshState,
@@ -51,7 +95,7 @@ fun ImageListingScreen(
                     }
                 }
             }
-          /*  if (state.errorMessage != null) {
+          *//*  if (state.errorMessage != null) {
                 Snackbar(
                     action = {
                         Button(onClick = {
@@ -62,7 +106,7 @@ fun ImageListingScreen(
                     },
                     modifier = Modifier.padding(16.dp)
                 ) { Text(text = state.errorMessage) }
-            }*/
+            }*//*
         }
-    )
+    )*/
 }
