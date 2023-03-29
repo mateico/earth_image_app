@@ -62,7 +62,9 @@ object AppModule {
             app,
             EarthImagesDatabase::class.java,
             "earthimagesdb.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
 }

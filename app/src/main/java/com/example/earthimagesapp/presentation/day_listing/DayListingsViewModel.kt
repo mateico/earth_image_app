@@ -20,7 +20,8 @@ class DayListingsViewModel @Inject constructor(
     var state by mutableStateOf(DayListingsState())
 
     init {
-        getDayListings()
+        //getDayListings()
+        getImageByDateListing()
     }
 
     fun onEvent(event: DayListingsEvent) {
@@ -62,6 +63,35 @@ class DayListingsViewModel @Inject constructor(
                         }
                         else -> {
                             state = state.copy(errorMessage = "Error getting the list of days")
+                        }
+                    }
+                }
+        }
+    }
+
+    fun getImageByDateListing() {
+        Timber.d("getting images")
+        viewModelScope.launch {
+            repository
+                .getImageByDay()
+                .collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            result.data?.let { listings ->
+                                Timber.d(listings.toString())
+                            }
+                        }
+
+                        is Error -> {
+                            Timber.e("Error loading list")
+                            state = state.copy(errorMessage = result.message)
+                        }
+
+                        is Resource.Loading -> {
+                            state = state.copy(isLoading = result.isLoading)
+                        }
+                        else -> {
+                            state = state.copy(errorMessage = result.message)
                         }
                     }
                 }
