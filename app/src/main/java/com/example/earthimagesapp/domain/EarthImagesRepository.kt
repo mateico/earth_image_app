@@ -1,6 +1,5 @@
 package com.example.earthimagesapp.domain
 
-import com.example.earthimagesapp.data.remote.dto.ImageDataDto
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
 import com.example.earthimagesapp.util.Resource
@@ -10,9 +9,11 @@ interface EarthImagesRepository {
 
     suspend fun getDays(): Flow<Resource<List<Day>>>
 
-    suspend fun getImageByDayFromRemote(day: String)
+    suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>>
 
-    suspend fun getImageByDayFromLocal(day: String): Flow<Resource<List<ImageData>>>
+    //suspend fun getImageDataFromRemote()
+
+    suspend fun getImageDataByDayFromLocal(day: String): Flow<Resource<List<ImageData>>>
 
     suspend fun getListImagesToDownload(): Flow<Resource<List<String>>>
 

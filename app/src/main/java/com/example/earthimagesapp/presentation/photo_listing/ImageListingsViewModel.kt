@@ -7,11 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.earthimagesapp.domain.EarthImagesRepository
-import com.example.earthimagesapp.presentation.day_listing.DayListingsState
 import com.example.earthimagesapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +29,7 @@ class ImageListingsViewModel @Inject constructor(
             val day = savedStateHandle.get<String>("day") ?: return@launch
             state = state.copy(day = day)
             repository
-                .getImageByDayFromLocal(day)
+                .getImageDataByDayFromLocal(day)
                 .collect { result ->
                     when (result) {
                         is Resource.Success -> {

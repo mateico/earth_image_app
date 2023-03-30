@@ -1,19 +1,19 @@
 package com.example.earthimagesapp.presentation.day_listing
 
 import android.app.Application
-import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.*
 import androidx.work.*
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.util.*
 import com.example.earthimagesapp.workers.WordManagerDownloadImage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -38,10 +38,10 @@ class DayListingsViewModel @Inject constructor(
     val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
 
     init {
-        getDayListings()
+        getData()
     }
 
-    fun down() {
+    fun downloadImages() {
         viewModelScope.launch {
             repository.getListImagesToDownload().collect { result ->
                 result.data?.forEach { url ->
@@ -67,6 +67,10 @@ class DayListingsViewModel @Inject constructor(
             WorkManager.getInstance().enqueue(mutableListWorkRequest)
 
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            state = state.copy(isLoading = false)
+        }, 3000)
     }
 
     fun onEvent(event: DayListingsEvent) {
@@ -74,7 +78,7 @@ class DayListingsViewModel @Inject constructor(
             is DayListingsEvent.Refresh -> {
                 Timber.d("refreshing list")
                 //getDayListings()
-                down()
+                //downloadImages()
             }
 
             is DayListingsEvent.CloseErrorMessage -> {
@@ -84,13 +88,9 @@ class DayListingsViewModel @Inject constructor(
         }
     }
 
-
-    private fun createInputData(): Data {
-        val builder = Data.Builder()
-        imageUri?.let { builder.putString(KEY_IMAGE_URI, it.toString()) }
-        return builder.build()
+    fun getData(){
+        getDayListings()
     }
-
     fun getDayListings() {
         Timber.d("getting day")
         viewModelScope.launch {
@@ -104,6 +104,7 @@ class DayListingsViewModel @Inject constructor(
                                     days = listings
                                 )
                             }
+                            getImagesData()
                         }
 
                         is Error -> {
@@ -113,6 +114,39 @@ class DayListingsViewModel @Inject constructor(
 
                         is Resource.Loading -> {
                             state = state.copy(isLoading = result.isLoading)
+                        }
+                        else -> {
+                            state = state.copy(errorMessage = "Error getting the list of days")
+                            state = state.copy(isLoading = false)
+                        }
+                    }
+                }
+        }
+    }
+
+    fun getImagesData(){
+        viewModelScope.launch {
+            repository
+                .getImageDataByDayFromRemote()
+                .collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            result.data?.let { index ->
+                                if(index == 10){
+                                    downloadImages()
+                                    //Timber.d("index larger that 10")
+                                }
+                            }
+                            //repository.getImageDataByDayFromRemote()
+                        }
+
+                        is Error -> {
+                            Timber.e("Error loading list")
+                            state = state.copy(errorMessage = result.message)
+                        }
+
+                        is Resource.Loading -> {
+                            //state = state.copy(isLoading = result.isLoading)
                         }
                         else -> {
                             state = state.copy(errorMessage = "Error getting the list of days")
