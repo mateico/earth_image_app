@@ -7,12 +7,12 @@ import com.example.earthimagesapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakeEarthImagesRepository: EarthImagesRepository {
+class FakeEarthImagesRepository : EarthImagesRepository {
 
     private val days = mutableListOf<Day>()
 
     override suspend fun getDays(): Flow<Resource<List<Day>>> {
-        return flow { emit(Resource.Success(days) ) }
+        return flow { emit(Resource.Success(days)) }
     }
 
     override suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>> {

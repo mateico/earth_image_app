@@ -8,8 +8,7 @@ import com.example.earthimagesapp.data.remote.EarthImagesApi
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
-import com.example.earthimagesapp.util.DateUtils
-import com.example.earthimagesapp.util.Resource
+import com.example.earthimagesapp.util.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -122,12 +121,13 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
             emit(Resource.Success(
                 data = imageEntities.map {
-                    "https://epic.gsfc.nasa.gov/archive/enhanced/${
+                    "$IMAGE_URI_START${
                         DateUtils.formatDateToGetImage(
                             it.date
                         )
-                    }/png/epic_RGB_${it.identifier}.png"
+                    }$IMAGE_URI_MIDDLE${it.identifier}$IMAGE_TYPE"
                 }
+
             ))
 
             emit(Resource.Loading(false))

@@ -23,6 +23,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.earthimagesapp.presentation.Screen
+import com.example.earthimagesapp.util.IMAGE_PATH_START
+import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -69,7 +71,7 @@ fun ImageListingScreen(
 
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(
-                                    "/data/data/com.example.earthimagesapp/files/epic_RGB_${image.identifier}.png"
+                                    "$IMAGE_PATH_START${image.identifier}$IMAGE_TYPE"
                                 )
                                 .crossfade(true)
                                 .build(),

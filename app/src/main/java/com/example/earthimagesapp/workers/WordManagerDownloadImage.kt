@@ -9,7 +9,6 @@ import androidx.work.workDataOf
 import com.example.earthimagesapp.util.KEY_IMAGE_PATH
 import com.example.earthimagesapp.util.KEY_IMAGE_URL
 import com.example.earthimagesapp.util.URL_SEPARATOR_CHARACTER
-import timber.log.Timber
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
