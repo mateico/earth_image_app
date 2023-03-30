@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateUtils {
-
     fun formatDateToGetImage(date: String): String {
         val input = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val dateValue: Date = input.parse(date)
