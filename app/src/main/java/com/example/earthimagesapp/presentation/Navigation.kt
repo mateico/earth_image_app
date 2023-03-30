@@ -38,7 +38,7 @@ fun Navigation() {
                 }
             )
         ) {
-            it.arguments?.getString("identifier")?.let { PhotoScreen() }
+            it.arguments?.getString("identifier")?.let { PhotoScreen(navController = navController) }
         }
     }
 }

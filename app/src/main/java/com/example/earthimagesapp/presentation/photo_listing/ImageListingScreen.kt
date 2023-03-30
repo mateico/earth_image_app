@@ -8,6 +8,10 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,6 +38,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 @Destination
 fun ImageListingScreen(
     viewModel: ImageListingsViewModel = hiltViewModel(),
@@ -42,6 +47,17 @@ fun ImageListingScreen(
 
     val state = viewModel.state
 
+    Column {
+        TopAppBar(
+            title = {
+                Text("Images List (${state.day})")
+            },
+            navigationIcon = {
+                IconButton(onClick = {navController.popBackStack() }) {
+                    Icon(Icons.Filled.ArrowBack, null)
+                }
+            }
+        )
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
         content = {
@@ -119,4 +135,4 @@ fun ImageListingScreen(
             }*//*
         }
     )*/
-}
+}}

@@ -29,6 +29,7 @@ class ImageListingsViewModel @Inject constructor(
     private fun getImages() {
         viewModelScope.launch {
             val day = savedStateHandle.get<String>("day") ?: return@launch
+            state = state.copy(day = day)
             repository
                 .getImageByDayFromLocal(day)
                 .collect { result ->
