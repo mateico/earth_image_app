@@ -17,7 +17,7 @@ interface EarthImagesRepository {
 
     suspend fun getPhotoDataById(id: String): Flow<Resource<ImageData>>
 
-    suspend fun insertDays(products: List<Day>)
+    suspend fun insertDays(days: List<Day>)
 
 
 }
