@@ -79,13 +79,7 @@ fun PhotoScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(
-                            "https://epic.gsfc.nasa.gov/archive/enhanced/${
-                                state.photo?.let {
-                                    DateUtils.formatDateToGetImage(
-                                        it.date
-                                    )
-                                }
-                            }/png/epic_RGB_${state.photo?.identifier}.png"
+                            "/data/data/com.example.earthimagesapp/files/epic_RGB_${state.photo?.identifier}.png"
                         )
                         .crossfade(true)
                         .build(),

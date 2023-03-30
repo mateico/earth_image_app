@@ -29,6 +29,21 @@ fun ImageItem(image: ImageData,
         Column(modifier = Modifier
             .padding(12.dp)
             .fillMaxWidth()) {
+           /* AsyncImage(
+                modifier = Modifier
+                    .width(50.dp)
+                    .height(50.dp)
+                    .clip(CircleShape),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
+                    .crossfade(true)
+                    .build(),
+                placeholder = painterResource(com.example.earthimagesapplication.R.drawable.placeholder),
+                contentDescription = "This is the description",
+                contentScale = ContentScale.Crop
+
+            )*/
+
             AsyncImage(
                 modifier = Modifier
                     .width(50.dp)

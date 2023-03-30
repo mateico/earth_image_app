@@ -31,7 +31,7 @@ class WordManagerDownloadImage(appContext: Context, workerParams: WorkerParamete
 
     private fun downloadImage(imageUrl: String): String {
         try {
-            val filename = imageUrl.substringAfterLast(URL_SEPARATOR_CHARACTER) + ".png"
+            val filename = imageUrl.substringAfterLast(URL_SEPARATOR_CHARACTER)
             if(File(filename).exists()) return ""
             val connection: HttpURLConnection = URL(imageUrl).openConnection() as HttpURLConnection
             connection.connect()

@@ -73,7 +73,7 @@ fun ImageListingScreen(
                 ) {
 
 
-                    AsyncImage(
+                   /* AsyncImage(
                         modifier = Modifier
                             .width(200.dp)
                             .height(200.dp).
@@ -93,7 +93,28 @@ fun ImageListingScreen(
                         contentDescription = "This is the description",
                         contentScale = ContentScale.Crop
 
+                    )*/
+
+                    AsyncImage(
+                        modifier = Modifier
+                            .width(200.dp)
+                            .height(200.dp).
+                            clickable { navController.navigate(Screen.PhotoDetailScreen.route + "/" + image.identifier) },
+
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(
+                                "/data/data/com.example.earthimagesapp/files/epic_RGB_${image.identifier}.png"
+                            )
+                            .crossfade(true)
+                            .build(),
+                        placeholder = painterResource(R.drawable.placeholder),
+                        contentDescription = "This is the description",
+                        contentScale = ContentScale.Crop
+
                     )
+
+
+
 
                 }
             }

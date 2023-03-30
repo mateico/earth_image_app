@@ -105,7 +105,7 @@ fun DayListingScreen(
             content = { innerPadding ->
                 SwipeRefresh(
                     state = swipeRefreshState,
-                    onRefresh = { viewModel.onWorkEvent(MyEvent.DownloadImage) }
+                    onRefresh = { viewModel.onEvent(DayListingsEvent.Refresh) }
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()

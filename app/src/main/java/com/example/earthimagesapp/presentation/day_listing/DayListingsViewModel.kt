@@ -40,7 +40,7 @@ class DayListingsViewModel @Inject constructor(
     val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
 
     init {
-
+        getDayListings()
         /*for (line in 1..100) {
             listUrls.add("https://picsum.photos/300/300?image=$line")
         }
