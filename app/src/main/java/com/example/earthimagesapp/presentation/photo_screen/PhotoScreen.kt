@@ -22,6 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.earthimagesapp.util.IMAGE_TYPE
+import com.example.earthimagesapp.util.IMAGE_URL_START
 import com.example.earthimagesapplication.R
 import com.ramcosta.composedestinations.annotation.Destination
 import java.lang.Math.*
@@ -70,7 +72,7 @@ fun PhotoScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(
-                            "/data/data/com.example.earthimagesapp/files/epic_RGB_${state.photo?.identifier}.png"
+                            "$IMAGE_URL_START${state.photo?.identifier}$IMAGE_TYPE"
                         )
                         .crossfade(true)
                         .build(),
