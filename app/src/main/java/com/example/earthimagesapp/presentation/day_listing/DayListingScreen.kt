@@ -24,7 +24,6 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-@RootNavGraph(start = true)
 @Destination
 fun DayListingScreen(
     viewModel: DayListingsViewModel = hiltViewModel(),
