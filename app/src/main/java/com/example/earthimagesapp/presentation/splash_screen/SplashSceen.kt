@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.earthimagesapp.presentation.Screen
+import com.example.earthimagesapp.util.SPLASH_DELAY_TIME_MILLIS
 import com.example.earthimagesapplication.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -37,15 +38,13 @@ fun SplashScreen(navController: NavController) {
     LaunchedEffect(key1 = true) {
         scale.animateTo(
             targetValue = 0.7f,
-            // tween Animation
             animationSpec = tween(
                 durationMillis = 800,
                 easing = {
                     OvershootInterpolator(4f).getInterpolation(it)
                 })
         )
-        // Customize the delay time
-        delay(10L)
+        delay(SPLASH_DELAY_TIME_MILLIS)
         navController.navigate(Screen.DayListingScreen.route)
     }
 
@@ -53,9 +52,6 @@ fun SplashScreen(navController: NavController) {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        /*Image(painter = painterResource(id = R.drawable.baseline_satellite_24),
-            contentDescription = "Logo",
-            modifier = Modifier.scale(scale.value))*/
         AsyncImage(
             modifier = Modifier
                 .width(50.dp)
@@ -68,7 +64,6 @@ fun SplashScreen(navController: NavController) {
             placeholder = painterResource(R.drawable.placeholder),
             contentDescription = "This is the description",
             contentScale = ContentScale.Crop
-
         )
     }
 }
