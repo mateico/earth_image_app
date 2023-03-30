@@ -74,6 +74,7 @@ fun ImageListingScreen(
                                 .crossfade(true)
                                 .build(),
                             placeholder = painterResource(R.drawable.placeholder),
+                            error = painterResource(R.drawable.baseline_satellite_24),
                             contentDescription = "This is the description",
                             contentScale = ContentScale.Crop
 
