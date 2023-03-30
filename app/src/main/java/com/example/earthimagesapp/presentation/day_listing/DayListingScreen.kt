@@ -24,7 +24,6 @@ import androidx.work.*
 import androidx.work.R
 import com.example.earthimagesapp.presentation.Screen
 import com.example.earthimagesapp.util.KEY_IMAGE_URL
-import com.example.earthimagesapp.util.TAG_OUTPUT
 import com.example.earthimagesapp.workers.WordManagerDownloadImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState

@@ -14,7 +14,10 @@ import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-class WordManagerDownloadImage(appContext: Context, workerParams: WorkerParameters) :
+class WordManagerDownloadImage(
+    appContext: Context,
+    workerParams: WorkerParameters
+) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
         return try {
