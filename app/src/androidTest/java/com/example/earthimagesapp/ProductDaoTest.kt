@@ -18,6 +18,7 @@ class ProductDaoTest {
 
     private lateinit var database: ProductDatabase
     private lateinit var productDao: ProductDao
+
     @Before
     fun setupDatabase() {
         database = Room.inMemoryDatabaseBuilder(
@@ -34,7 +35,7 @@ class ProductDaoTest {
         productDao.insertProductListing(listOf(product.toProductListingEntity()))
 
 
-            val result = productDao.getProductListing()
+        val result = productDao.getProductListing()
 
         assertEquals(result.size, 1)
 

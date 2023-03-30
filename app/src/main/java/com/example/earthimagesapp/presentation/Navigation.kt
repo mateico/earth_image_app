@@ -1,6 +1,5 @@
 package com.example.earthimagesapp.presentation
 
-import android.provider.ContactsContract.Contacts.Photo
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -32,7 +31,8 @@ fun Navigation() {
                 }
             )
         ) {
-            it.arguments?.getString("day")?.let { ImageListingScreen(navController = navController) }
+            it.arguments?.getString("day")
+                ?.let { ImageListingScreen(navController = navController) }
         }
         composable(
             route = Screen.PhotoDetailScreen.route + "/{identifier}",
@@ -43,7 +43,8 @@ fun Navigation() {
                 }
             )
         ) {
-            it.arguments?.getString("identifier")?.let { PhotoScreen(navController = navController) }
+            it.arguments?.getString("identifier")
+                ?.let { PhotoScreen(navController = navController) }
         }
     }
 }

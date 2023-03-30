@@ -22,5 +22,4 @@ interface EarthImagesRepository {
     suspend fun insertDays(products: List<Day>)
 
 
-
 }

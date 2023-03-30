@@ -5,7 +5,6 @@ import com.example.earthimagesapp.data.mapper.toDay
 import com.example.earthimagesapp.data.mapper.toDayEntity
 import com.example.earthimagesapp.data.mapper.toImageData
 import com.example.earthimagesapp.data.remote.EarthImagesApi
-import com.example.earthimagesapp.data.remote.dto.DayDto
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
@@ -21,14 +20,11 @@ import javax.inject.Singleton
 @Singleton
 class EarthImagesRepositoryImpl @Inject constructor(
     private val api: EarthImagesApi,
-    private val db: EarthImagesDatabase
+    db: EarthImagesDatabase
 ) : EarthImagesRepository {
 
     private val dayDao = db.dayDao
     private val imageDataDao = db.imageDataDao
-
-    var counter = 0
-    private var remoteDayListings: List<DayDto>? = emptyList()
 
     override suspend fun getDays(): Flow<Resource<List<Day>>> {
         return flow {
@@ -40,7 +36,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
                 data = localDayListing.map { it.toDay() }
             ))
 
-            remoteDayListings = try {
+            val remoteDayListings = try {
                 api.getDays()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -66,19 +62,10 @@ class EarthImagesRepositoryImpl @Inject constructor(
                     data = dayDao.getDayListing().map { it.toDay() }
                 ))
 
-                // get all Images iterating by day
-                //getImageDataByDayFromRemote(dayListings[counter].date)
-
             }
 
         }
     }
-
-    /*override suspend fun getImageDataFromRemote() {
-        val localDayListing = dayDao.getDayListing()
-        var index = 0;
-        getImageDataByDayFromRemote(localDayListing[index++].date)
-    }*/
 
     override suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>> {
 
@@ -104,6 +91,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
                         imageByDayListings.map { it.toImageDataEntity() }
                     )
                 }
+
                 emit(
                     Resource.Success(
                         data = index

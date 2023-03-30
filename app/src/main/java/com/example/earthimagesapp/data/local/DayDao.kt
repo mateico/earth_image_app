@@ -14,5 +14,4 @@ interface DayDao {
     @Query("SELECT * FROM dayentity")
     suspend fun getDayListing(): List<DayEntity>
 
-
 }

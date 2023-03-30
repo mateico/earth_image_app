@@ -9,7 +9,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
-class EarthImagesApplication : Application(), Configuration.Provider{
+class EarthImagesApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory

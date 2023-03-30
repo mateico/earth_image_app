@@ -35,7 +35,7 @@ class WordManagerDownloadImage(
     private fun downloadImage(imageUrl: String): String {
         try {
             val filename = imageUrl.substringAfterLast(URL_SEPARATOR_CHARACTER)
-            if(File(filename).exists()) return ""
+            if (File(filename).exists()) return ""
             val connection: HttpURLConnection = URL(imageUrl).openConnection() as HttpURLConnection
             connection.connect()
             if (connection.responseCode != 200) return ""

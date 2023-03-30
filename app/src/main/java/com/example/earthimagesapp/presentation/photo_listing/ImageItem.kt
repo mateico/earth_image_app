@@ -18,31 +18,35 @@ import com.example.earthimagesapp.domain.model.ImageData
 import com.example.earthimagesapp.util.DateUtils
 
 @Composable
-fun ImageItem(image: ImageData,
-            modifier: Modifier = Modifier,
-            onClick: () -> Unit) {
+fun ImageItem(
+    image: ImageData,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
             .clickable { onClick() }
     ) {
-        Column(modifier = Modifier
-            .padding(12.dp)
-            .fillMaxWidth()) {
-           /* AsyncImage(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .clip(CircleShape),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(com.example.earthimagesapplication.R.drawable.placeholder),
-                contentDescription = "This is the description",
-                contentScale = ContentScale.Crop
+        Column(
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth()
+        ) {
+            /* AsyncImage(
+                 modifier = Modifier
+                     .width(50.dp)
+                     .height(50.dp)
+                     .clip(CircleShape),
+                 model = ImageRequest.Builder(LocalContext.current)
+                     .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
+                     .crossfade(true)
+                     .build(),
+                 placeholder = painterResource(com.example.earthimagesapplication.R.drawable.placeholder),
+                 contentDescription = "This is the description",
+                 contentScale = ContentScale.Crop
 
-            )*/
+             )*/
 
             AsyncImage(
                 modifier = Modifier
@@ -50,7 +54,13 @@ fun ImageItem(image: ImageData,
                     .height(50.dp)
                     .clip(CircleShape),
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
+                    .data(
+                        "https://epic.gsfc.nasa.gov/archive/enhanced/${
+                            DateUtils.formatDateToGetImage(
+                                image.date
+                            )
+                        }/png/epic_RGB_${image.identifier}.png"
+                    )
                     .crossfade(true)
                     .build(),
                 placeholder = painterResource(com.example.earthimagesapplication.R.drawable.placeholder),

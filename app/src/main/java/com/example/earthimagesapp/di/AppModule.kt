@@ -33,7 +33,6 @@ object AppModule {
     }
 
 
-
     @Provides
     @Singleton
     fun provideEarthImagesApi(): EarthImagesApi {
@@ -45,7 +44,8 @@ object AppModule {
         if (BuildConfig.DEBUG) {
             val logging = HttpLoggingInterceptor()
             logging.level = HttpLoggingInterceptor.Level.BODY
-            okHttpClientBuilder.addInterceptor(logging)}
+            okHttpClientBuilder.addInterceptor(logging)
+        }
 
         return Retrofit.Builder()
             .baseUrl(EarthImagesApi.BASE_URL)

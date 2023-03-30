@@ -2,33 +2,18 @@ package com.example.earthimagesapp.presentation.day_listing
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Observer
-
 import androidx.navigation.NavController
 import androidx.work.*
-import androidx.work.R
 import com.example.earthimagesapp.presentation.Screen
-import com.example.earthimagesapp.util.KEY_IMAGE_URL
-import com.example.earthimagesapp.workers.WordManagerDownloadImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import java.util.concurrent.TimeUnit
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,7 +120,7 @@ fun DayListingScreen(
                     ) { Text(text = state.errorMessage) }
                 }
 
-                if(state.isLoading){
+                if (state.isLoading) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,

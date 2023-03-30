@@ -7,12 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.earthimagesapp.domain.EarthImagesRepository
-import com.example.earthimagesapp.presentation.day_listing.DayListingsEvent
-import com.example.earthimagesapp.presentation.photo_listing.ImageListingsState
 import com.example.earthimagesapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel

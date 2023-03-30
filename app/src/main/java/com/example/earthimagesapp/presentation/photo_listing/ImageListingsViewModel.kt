@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ImageListingsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val repository: EarthImagesRepository
-) : ViewModel()  {
+) : ViewModel() {
 
     var state by mutableStateOf(ImageListingsState())
 

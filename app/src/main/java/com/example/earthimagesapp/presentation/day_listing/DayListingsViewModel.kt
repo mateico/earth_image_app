@@ -6,10 +6,12 @@ import android.os.Looper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.work.*
 import com.example.earthimagesapp.domain.EarthImagesRepository
-import com.example.earthimagesapp.util.*
+import com.example.earthimagesapp.util.KEY_IMAGE_URL
+import com.example.earthimagesapp.util.Resource
 import com.example.earthimagesapp.workers.WordManagerDownloadImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

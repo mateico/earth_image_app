@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class WorkManagerInitializer: Initializer<WorkManager> {
+class WorkManagerInitializer : Initializer<WorkManager> {
 
     @Provides
     @Singleton
