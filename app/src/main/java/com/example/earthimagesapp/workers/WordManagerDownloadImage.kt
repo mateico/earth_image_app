@@ -24,10 +24,8 @@ class WordManagerDownloadImage(
             val imageUrl = inputData.getString(KEY_IMAGE_URL)
             val filePath = if (imageUrl != null) downloadImage(imageUrl) else ""
             val outputData = workDataOf(KEY_IMAGE_PATH to filePath)
-            Timber.d("Word manager result succcess")
             Result.success(outputData)
         } catch (e: Exception) {
-            Timber.d("Word manager result failur")
             Result.failure()
         }
     }

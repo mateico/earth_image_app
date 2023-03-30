@@ -6,11 +6,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.work.*
 import com.example.earthimagesapp.presentation.Screen
+import com.example.earthimagesapplication.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -29,7 +31,7 @@ fun DayListingScreen(
     Column {
         TopAppBar(
             title = {
-                Text("Days List")
+                Text(stringResource(R.string.DaysListScreenTitle))
             },
         )
 

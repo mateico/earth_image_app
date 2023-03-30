@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Earth Images Application</string>
+    <string name="DaysListScreenTitle">Days List</string>
+    <string name="PhotoScreenTitle">Photo Screen</string>
 </resources>

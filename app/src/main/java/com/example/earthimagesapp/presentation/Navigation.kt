@@ -22,28 +22,30 @@ fun Navigation() {
         composable(route = Screen.DayListingScreen.route) {
             DayListingScreen(navController = navController)
         }
+        val photoListParam = "day"
         composable(
-            route = Screen.PhotoListingScreen.route + "/{day}",
+            route = Screen.PhotoListingScreen.route + "/{$photoListParam}",
             arguments = listOf(
-                navArgument("day") {
+                navArgument("$photoListParam") {
                     type = NavType.StringType
                     nullable = false
                 }
             )
         ) {
-            it.arguments?.getString("day")
+            it.arguments?.getString("$photoListParam")
                 ?.let { ImageListingScreen(navController = navController) }
         }
+        val photoDetailParam = "identifier"
         composable(
-            route = Screen.PhotoDetailScreen.route + "/{identifier}",
+            route = Screen.PhotoDetailScreen.route + "/{$photoDetailParam}",
             arguments = listOf(
-                navArgument("identifier") {
+                navArgument("$photoDetailParam") {
                     type = NavType.StringType
                     nullable = false
                 }
             )
         ) {
-            it.arguments?.getString("identifier")
+            it.arguments?.getString("$photoDetailParam")
                 ?.let { PhotoScreen(navController = navController) }
         }
     }

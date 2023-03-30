@@ -15,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +44,7 @@ fun PhotoScreen(
 
             TopAppBar(
                 title = {
-                    Text("Photo Screen")
+                    Text(stringResource(R.string.PhotoScreenTitle))
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
