@@ -20,6 +20,9 @@ interface ImageDataDao {
     )
     suspend fun getImagesByDayListing(date: String): List<ImageDataEntity>
 
+    @Query("SELECT * FROM imagedataentity")
+    suspend fun getImagesByDayListing(): List<ImageDataEntity>
+
     @Query("SELECT * FROM imagedataentity WHERE identifier = :id")
     suspend fun getImageById(id: String): ImageDataEntity
 }

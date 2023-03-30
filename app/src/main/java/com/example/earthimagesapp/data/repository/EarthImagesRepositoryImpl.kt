@@ -9,6 +9,7 @@ import com.example.earthimagesapp.data.remote.dto.DayDto
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
+import com.example.earthimagesapp.util.DateUtils
 import com.example.earthimagesapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -105,6 +106,19 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
             emit(Resource.Success(
                 data = localImagesByDayListing.map { it.toImageData() }
+            ))
+
+            emit(Resource.Loading(false))
+            return@flow
+        }
+    }
+
+    override suspend fun getListImagesToDownload(): Flow<Resource<List<String>>> {
+        return flow {
+            val imageEntities = imageDataDao.getImagesByDayListing()
+
+            emit(Resource.Success(
+                data = imageEntities.map { "https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(it.date)}/png/epic_RGB_${it.identifier}.png" }
             ))
 
             emit(Resource.Loading(false))
