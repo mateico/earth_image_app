@@ -1,7 +1,6 @@
 package com.example.earthimagesapp.presentation.day_listing
 
 import android.app.Application
-import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.runtime.getValue
@@ -13,7 +12,6 @@ import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.util.*
 import com.example.earthimagesapp.workers.WordManagerDownloadImage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -27,21 +25,13 @@ class DayListingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     var state by mutableStateOf(DayListingsState())
-
-    //val workInfo = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
-    private var imageUri: Uri? = null
-    private val listUrls: MutableList<String> = mutableListOf()
-    private var _listUrlsDownload = MutableLiveData<List<String>>()
-    val listUrlsDownload: LiveData<List<String>>
-        get() = _listUrlsDownload
-
-    val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
+    private val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
 
     init {
         getData()
     }
 
-    fun downloadImages() {
+    private fun downloadImages() {
         viewModelScope.launch {
             repository.getListImagesToDownload().collect { result ->
                 result.data?.forEach { url ->
@@ -61,9 +51,6 @@ class DayListingsViewModel @Inject constructor(
                     )
                 }
             }
-
-
-
             WorkManager.getInstance().enqueue(mutableListWorkRequest)
 
         }
@@ -76,22 +63,19 @@ class DayListingsViewModel @Inject constructor(
     fun onEvent(event: DayListingsEvent) {
         when (event) {
             is DayListingsEvent.Refresh -> {
-                Timber.d("refreshing list")
-                //getDayListings()
-                //downloadImages()
+                // do refresh
             }
-
             is DayListingsEvent.CloseErrorMessage -> {
-                Timber.d("closing snack bar")
                 state = state.copy(errorMessage = null)
             }
         }
     }
 
-    fun getData(){
+    private fun getData() {
         getDayListings()
     }
-    fun getDayListings() {
+
+    private fun getDayListings() {
         Timber.d("getting day")
         viewModelScope.launch {
             repository
@@ -124,7 +108,7 @@ class DayListingsViewModel @Inject constructor(
         }
     }
 
-    fun getImagesData(){
+    private fun getImagesData() {
         viewModelScope.launch {
             repository
                 .getImageDataByDayFromRemote()
@@ -132,12 +116,10 @@ class DayListingsViewModel @Inject constructor(
                     when (result) {
                         is Resource.Success -> {
                             result.data?.let { index ->
-                                if(index == 10){
+                                if (index == 10) {
                                     downloadImages()
-                                    //Timber.d("index larger that 10")
                                 }
                             }
-                            //repository.getImageDataByDayFromRemote()
                         }
 
                         is Error -> {
@@ -155,6 +137,4 @@ class DayListingsViewModel @Inject constructor(
                 }
         }
     }
-
-
 }
