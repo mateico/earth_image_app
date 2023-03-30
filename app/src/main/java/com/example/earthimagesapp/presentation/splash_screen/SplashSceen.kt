@@ -2,6 +2,7 @@ package com.example.earthimagesapp.presentation.splash_screen
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -13,9 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -52,18 +55,8 @@ fun SplashScreen(navController: NavController) {
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .width(50.dp)
-                .height(50.dp)
-                .clip(CircleShape),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data("/data/data/com.example.earthimagesapp/files/epic_RGB_20160610084250.png")
-                .crossfade(true)
-                .build(),
-            placeholder = painterResource(R.drawable.placeholder),
-            contentDescription = "This is the description",
-            contentScale = ContentScale.Crop
-        )
+        Image(painter = painterResource(id = R.drawable.baseline_satellite_24),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(scale.value))
     }
 }
