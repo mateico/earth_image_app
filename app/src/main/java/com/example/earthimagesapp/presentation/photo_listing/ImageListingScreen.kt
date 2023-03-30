@@ -61,29 +61,6 @@ fun ImageListingScreen(
                         contentAlignment = Alignment.Center
                     ) {
 
-
-                        /* AsyncImage(
-                             modifier = Modifier
-                                 .width(200.dp)
-                                 .height(200.dp).
-                             clickable { navController.navigate(Screen.PhotoDetailScreen.route + "/" + image.identifier) },
-
-                             model = ImageRequest.Builder(LocalContext.current)
-                                 .data(
-                                     "https://epic.gsfc.nasa.gov/archive/enhanced/${
-                                         DateUtils.formatDateToGetImage(
-                                             image.date
-                                         )
-                                     }/png/epic_RGB_${image.identifier}.png"
-                                 )
-                                 .crossfade(true)
-                                 .build(),
-                             placeholder = painterResource(R.drawable.placeholder),
-                             contentDescription = "This is the description",
-                             contentScale = ContentScale.Crop
-
-                         )*/
-
                         AsyncImage(
                             modifier = Modifier
                                 .width(200.dp)
@@ -101,47 +78,8 @@ fun ImageListingScreen(
                             contentScale = ContentScale.Crop
 
                         )
-
-
                     }
                 }
             })
-        /*Scaffold(
-            content = { innerPadding ->
-                SwipeRefresh(
-                    state = swipeRefreshState,
-                    onRefresh = { Unit }
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        items(state.images.size) { i ->
-                            val image = state.images[i]
-                            ImageItem(
-                                image = image,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-
-                            ) {
-                                //navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
-                            }
-                        }
-                    }
-                }
-              *//*  if (state.errorMessage != null) {
-                Snackbar(
-                    action = {
-                        Button(onClick = {
-                            viewModel.onEvent(DayListingsEvent.CloseErrorMessage)
-                        }) {
-                            Text("Close")
-                        }
-                    },
-                    modifier = Modifier.padding(16.dp)
-                ) { Text(text = state.errorMessage) }
-            }*//*
-        }
-    )*/
     }
 }

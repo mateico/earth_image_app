@@ -26,64 +26,13 @@ fun DayListingScreen(
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = viewModel.state.isRefreshing)
     val state = viewModel.state
 
-    /*val workInfo = viewModel.workInfo.observeAsState().value
-    val downloadInfo = remember(workInfo) {
-        workInfo?.find { it.tags.contains(TAG_OUTPUT) }
-    }
-    val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
-
-    viewModel.listUrlsDownload.observe(LocalLifecycleOwner.current, Observer { listUrls ->
-        //toImage.text = listUrls.count().toString()
-        listUrls.forEach { url ->
-            mutableListWorkRequest.add(
-                OneTimeWorkRequestBuilder<WordManagerDownloadImage>()
-                    .setInputData(workDataOf(KEY_IMAGE_URL to url))
-                    .setConstraints(
-                        Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build()
-                    )
-                    .setBackoffCriteria(
-                        BackoffPolicy.LINEAR,
-                        OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                        TimeUnit.MILLISECONDS
-                    ).build()
-            )
-        }
-    })
-    WorkManager.getInstance().enqueue(mutableListWorkRequest)
-    mutableListWorkRequest.forEach { workRequest ->
-        WorkManager.getInstance().getWorkInfoByIdLiveData(workRequest.id)
-            .observe(LocalLifecycleOwner.current, Observer { workInfo ->
-                if (workInfo != null && workInfo.state.isFinished) {
-                    *//* totalQuantityOfImagesProcessed += 1
-                     fromImage.text = totalQuantityOfImagesProcessed.toString()
-                     val messageImage = if (workInfo.state == WorkInfo.State.SUCCEEDED)
-                         workInfo.outputData.getString(KEY_IMAGE_PATH)
-                     else getString(R.string.error_dowload_image)
-                     message.text = messageImage*//*
-                }
-            })
-    }*/
-
-
-
     Column {
         TopAppBar(
             title = {
                 Text("Days List")
             },
         )
-/*
-        when (workInfo?.) {
-            WorkInfo.State.CANCELLED -> Text(text = "Download cancelled")
-            WorkInfo.State.ENQUEUED -> Text(text = "Download enqueued")
-            WorkInfo.State.RUNNING -> Text(text = "Downloading")
-            WorkInfo.State.SUCCEEDED -> Text(text = "Download succeeded")
-            WorkInfo.State.FAILED -> Text(text = "Download failed")
-            WorkInfo.State.BLOCKED -> Text(text = "Download blocked")
-            else -> Text(text = "Something wrong happened")
-        }*/
+
         Scaffold(
             content = { innerPadding ->
                 SwipeRefresh(

@@ -37,7 +37,6 @@ class PhotoScreenViewModel @Inject constructor(
     private fun getPhoto() {
         viewModelScope.launch {
             val id = savedStateHandle.get<String>("identifier") ?: return@launch
-            //state = state.copy(testString = id)
             repository
                 .getPhotoDataById(id)
                 .collect { result ->
