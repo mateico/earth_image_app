@@ -9,7 +9,8 @@ fun ImageDataEntity.toImageData(): ImageData {
         date = date,
         identifier = identifier,
         image = image,
-        version = version
+        version = version,
+        centroIdCoordinates = centroIdCoordinates
     )
 }
 
@@ -19,6 +20,7 @@ fun ImageData.toImageDataEntity(): ImageDataEntity {
         date = date,
         identifier = identifier,
         image = image,
-        version = version
+        version = version,
+        centroIdCoordinates = centroIdCoordinates
     )
 }

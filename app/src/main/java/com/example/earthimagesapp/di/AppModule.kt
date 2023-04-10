@@ -2,11 +2,14 @@ package com.example.earthimagesapp.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.earthimagesapp.data.local.Converters
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
+import com.example.earthimagesapp.data.local.GsonParser
 import com.example.earthimagesapp.data.remote.EarthImagesApi
 import com.example.earthimagesapp.data.repository.EarthImagesRepositoryImpl
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapplication.BuildConfig
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,6 +66,7 @@ object AppModule {
             EarthImagesDatabase::class.java,
             "earthimagesdb.db"
         )
+            .addTypeConverter(Converters(GsonParser(Gson())))
             .fallbackToDestructiveMigration()
             .build()
     }

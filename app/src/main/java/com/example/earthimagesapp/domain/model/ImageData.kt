@@ -5,5 +5,6 @@ data class ImageData(
     val date: String,
     val identifier: String,
     val image: String,
-    val version: String?
+    val version: String?,
+    val centroIdCoordinates: CentroIdCoordinates?
 )

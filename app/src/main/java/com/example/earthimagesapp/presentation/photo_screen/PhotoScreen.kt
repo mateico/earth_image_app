@@ -137,6 +137,8 @@ fun PhotoScreen(
                     Text(text = "Version: ${state.photo?.version}")
                     Text(text = "Date: ${state.photo?.date}")
                     Text(text = "Image: ${state.photo?.image}")
+                    Text(text = "Latitude: ${state.photo?.centroIdCoordinates?.lat}")
+                    Text(text = "Longitude: ${state.photo?.centroIdCoordinates?.lon}")
                 }
             }
         }
