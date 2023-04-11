@@ -1,5 +1,6 @@
 package com.example.earthimagesapp.data.repository
 
+import androidx.compose.animation.scaleOut
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.mapper.toDay
 import com.example.earthimagesapp.data.mapper.toDayEntity
@@ -9,8 +10,7 @@ import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
 import com.example.earthimagesapp.util.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -31,9 +31,10 @@ class EarthImagesRepositoryImpl @Inject constructor(
             emit(Resource.Loading(true))
 
             val localDayListing = dayDao.getDayListing()
-            emit(Resource.Success(
-                data = localDayListing.map { it.toDay() }
-            ))
+
+            localDayListing.collect {result ->
+                emit(Resource.Success(data = result.map { it.toDay() }))
+            }
 
             val remoteDayListings = try {
                 api.getDays()
@@ -57,9 +58,9 @@ class EarthImagesRepositoryImpl @Inject constructor(
                     dayListings.map { it.toDayEntity() }
                 )
 
-                emit(Resource.Success(
-                    data = dayDao.getDayListing().map { it.toDay() }
-                ))
+                dayDao.getDayListing().collect {result ->
+                    emit(Resource.Success(data = result.map { it.toDay() }))
+                }
 
             }
 
@@ -69,33 +70,35 @@ class EarthImagesRepositoryImpl @Inject constructor(
     override suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>> {
 
         return flow {
-            val localDayListing = dayDao.getDayListing()
-            var index = 0;
-            while (index < localDayListing.size) {
-                val remoteImagesByDayListings = try {
-                    api.getImagesData("date/${localDayListing[index++].date}")
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    null
-                } catch (e: HttpException) {
-                    e.printStackTrace()
-                    null
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    null
-                }
+            dayDao.getDayListing().collect{ result ->
+                val localDayListing = result
+                var index = 0;
+                while (index < localDayListing.size) {
+                    val remoteImagesByDayListings = try {
+                        api.getImagesData("date/${localDayListing[index++].date}")
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        null
+                    } catch (e: HttpException) {
+                        e.printStackTrace()
+                        null
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        null
+                    }
 
-                remoteImagesByDayListings?.let { imageByDayListings ->
-                    imageDataDao.insertImagesByDayListing(
-                        imageByDayListings.map { it.toImageDataEntity() }
+                    remoteImagesByDayListings?.let { imageByDayListings ->
+                        imageDataDao.insertImagesByDayListing(
+                            imageByDayListings.map { it.toImageDataEntity() }
+                        )
+                    }
+
+                    emit(
+                        Resource.Success(
+                            data = index
+                        )
                     )
                 }
-
-                emit(
-                    Resource.Success(
-                        data = index
-                    )
-                )
             }
         }
     }

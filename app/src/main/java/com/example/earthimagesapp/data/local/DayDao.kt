@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DayDao {
@@ -12,6 +13,6 @@ interface DayDao {
     suspend fun insertDayListing(DayEntity: List<DayEntity>)
 
     @Query("SELECT * FROM dayentity")
-    suspend fun getDayListing(): List<DayEntity>
+    fun getDayListing(): Flow<List<DayEntity>>
 
 }
