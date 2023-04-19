@@ -1,18 +1,20 @@
 package com.example.earthimagesapp.data.repository
 
-import androidx.compose.animation.scaleOut
 import com.example.earthimagesapp.data.local.DayEntity
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.mapper.toDay
 import com.example.earthimagesapp.data.mapper.toDayEntity
 import com.example.earthimagesapp.data.mapper.toImageData
 import com.example.earthimagesapp.data.remote.EarthImagesApi
+import com.example.earthimagesapp.data.remote.dto.DayDto
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
 import com.example.earthimagesapp.util.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.internal.NopCollector.emit
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -26,8 +28,26 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
     private val dayDao = db.dayDao
     private val imageDataDao = db.imageDataDao
+    override fun getDays(): Flow<List<Day>> {
+        return dayDao.getDaysStream().map { entityDay ->
+            entityDay.map(DayEntity::toDay)
+        }.onEach {
+            if (it.isEmpty()) {
+                refreshDays()
+            }
+        }
+    }
 
-    override suspend fun getDays(): Flow<List<Day>> {
+    override suspend fun refreshDays() {
+        api.getDays()
+            .shuffled()
+            .also { dayDtos ->
+                dayDao.insertOrIgnoreDays(days = dayDtos.map(DayDto::toDayEntity))
+            }
+    }
+
+
+    /*override suspend fun getDays(): Flow<List<Day>> {
 
 
             //emit(Resource.Loading(true))
@@ -68,12 +88,12 @@ class EarthImagesRepositoryImpl @Inject constructor(
             }
 
 
-    }
+    }*/
 
     override suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>> {
 
         return flow {
-            dayDao.getDayListing().collect{ result ->
+            dayDao.getDaysStream().collect { result ->
                 val localDayListing = result
                 var index = 0;
                 while (index < localDayListing.size) {
@@ -157,7 +177,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertDays(days: List<Day>) {
-        dayDao.insertDayListing(
+        dayDao.insertOrIgnoreDays(
             days.map { it.toDayEntity() }
         )
     }

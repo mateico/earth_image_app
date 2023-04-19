@@ -35,10 +35,10 @@ class DayDaoTest {
     @Test
     fun insertDay_returnsTrue() = runBlocking {
         val day = Day("20220-03-22")
-        dayDao.insertDayListing(listOf(day.toDayEntity()))
+        dayDao.insertOrIgnoreDays(listOf(day.toDayEntity()))
 
 
-        val result = dayDao.getDayListing()
+        val result = dayDao.getDaysStream()
 
         assertEquals(result.size, 1)
 
