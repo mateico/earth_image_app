@@ -1,6 +1,7 @@
 package com.example.earthimagesapp.data.repository
 
 import androidx.compose.animation.scaleOut
+import com.example.earthimagesapp.data.local.DayEntity
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.mapper.toDay
 import com.example.earthimagesapp.data.mapper.toDayEntity
@@ -11,6 +12,7 @@ import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
 import com.example.earthimagesapp.util.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.internal.NopCollector.emit
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -25,22 +27,23 @@ class EarthImagesRepositoryImpl @Inject constructor(
     private val dayDao = db.dayDao
     private val imageDataDao = db.imageDataDao
 
-    override suspend fun getDays(): Flow<Resource<List<Day>>> {
-        return flow {
+    override suspend fun getDays(): Flow<List<Day>> {
 
-            emit(Resource.Loading(true))
+
+            //emit(Resource.Loading(true))
 
             val localDayListing = dayDao.getDayListing()
 
-            localDayListing.collect {result ->
-                emit(Resource.Success(data = result.map { it.toDay() }))
-            }
+            //localDayListing.collect {result ->
+               return dayDao.getDayListing().map { it.map (DayEntity::toDay)  }
+                //.map(DayEntity::toDay))
+            //}
 
             val remoteDayListings = try {
                 api.getDays()
             } catch (e: IOException) {
                 e.printStackTrace()
-                emit(Resource.Error("Please check your network connection"))
+                return emit(Resource.Error("Please check your network connection"))
                 null
             } catch (e: HttpException) {
                 e.printStackTrace()
@@ -64,7 +67,7 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
             }
 
-        }
+
     }
 
     override suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>> {
