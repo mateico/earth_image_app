@@ -1,11 +1,15 @@
 package com.example.earthimagesapp.presentation.day_listing
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,8 +29,24 @@ fun DayListingScreen(
     navController: NavController
 ) {
 
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = viewModel.state.isRefreshing)
-    val state = viewModel.state
+
+    //val state = viewModel.state
+    val snackBarHostState = remember { SnackbarHostState() }
+    val uiState: DayListingState by viewModel.uiState.collectAsState()
+    val errorMessage = stringResource(id = R.string.error_text)
+    val okText = stringResource(id = R.string.ok_button_text)
+
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = uiState.isRefreshing)
+
+    if (uiState.isError) {
+        LaunchedEffect(snackBarHostState) {
+            snackBarHostState.showSnackbar(
+                message = errorMessage,
+                actionLabel = okText
+            )
+            viewModel.onErrorConsumed()
+        }
+    }
 
     Column {
         TopAppBar(
@@ -39,12 +59,28 @@ fun DayListingScreen(
             content = { innerPadding ->
                 SwipeRefresh(
                     state = swipeRefreshState,
-                    onRefresh = { viewModel.onEvent(DayListingsEvent.Refresh) }
+                    onRefresh = { viewModel.onRefresh() }
                 ) {
-                    LazyColumn(
+                    DayList(uiState.days)
+                   /* LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        items(state.days.size) { i ->
+                        when (uiState) {
+                            uiState.days.Error -> {
+                                homeSectionErrorText(R.string.section_error_top_rated)
+                            }
+                            TopRatedMoviesUiState.Loading -> {
+                                item {
+                                    LoadingIndicator()
+                                }
+                            }
+                            is TopRatedMoviesUiState.Success -> {
+                                items(uiState.movies) { movie ->
+                                    HomePosterImage(movie)
+                                }
+                            }
+                        }*/
+                        /*items(state.days.size) { i ->
                             val day = state.days[i]
                             DayItem(
                                 day = day,
@@ -55,10 +91,10 @@ fun DayListingScreen(
                             ) {
                                 navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
                             }
-                        }
+                        }*/
                     }
-                }
-                if (state.errorMessage != null) {
+                //}
+               /* if (state.errorMessage != null) {
                     Snackbar(
                         action = {
                             Button(onClick = {
@@ -69,9 +105,9 @@ fun DayListingScreen(
                         },
                         modifier = Modifier.padding(16.dp)
                     ) { Text(text = state.errorMessage) }
-                }
+                }*/
 
-                if (state.isLoading) {
+              /*  if (uiState.isLoading) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
@@ -80,11 +116,77 @@ fun DayListingScreen(
                             modifier = Modifier.size(80.dp, 80.dp)
                         )
                     }
-                }
+                }*/
             }
 
         )
     }
 }
 
+@Composable
+fun DayList(uiState: DaysUiState) {
 
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+
+    ) {
+        when (uiState) {
+            DaysUiState.Error -> {
+                homeSectionErrorText(R.string.section_error_top_rated)
+            }
+            DaysUiState.Loading -> {
+                item {
+                    LoadingIndicator()
+                }
+            }
+            is DaysUiState.Success -> {
+                items(uiState.days.size) { i ->
+                    val day = uiState.days[i]
+                    DayItem(
+                        day = day,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+
+                    ) {
+                        //navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun LoadingIndicator(modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        CircularProgressIndicator(color = Color.LightGray)
+    }
+}
+
+fun LazyListScope.homeSectionErrorText(
+    @StringRes title: Int,
+    modifier: Modifier = Modifier
+) {
+    item {
+        ErrorText(
+            title = title,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+fun ErrorText(
+    @StringRes title: Int,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = stringResource(id = title),
+        modifier = modifier.padding(vertical = 24.dp)
+    )
+}

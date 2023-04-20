@@ -2,4 +2,13 @@
     <string name="app_name">Earth Images Application</string>
     <string name="DaysListScreenTitle">Days List</string>
     <string name="PhotoScreenTitle">Photo Screen</string>
+
+    <string name="section_error_top_rated">Failed to load top rated movies</string>
+    <string name="section_error_action">Failed to load Action movies</string>
+    <string name="section_error_animation">Failed to load Animation movies</string>
+
+    <string name="section_filter_text_default">See All</string>
+
+    <string name="error_text">Check your connection or try again later.</string>
+    <string name="ok_button_text">OK</string>
 </resources>
