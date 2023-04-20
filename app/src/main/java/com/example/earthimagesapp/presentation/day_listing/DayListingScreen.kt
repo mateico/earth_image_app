@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,7 +29,6 @@ fun DayListingScreen(
 ) {
 
 
-    //val state = viewModel.state
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState: DayListingState by viewModel.uiState.collectAsState()
     val errorMessage = stringResource(id = R.string.error_text)
@@ -61,62 +59,9 @@ fun DayListingScreen(
                     state = swipeRefreshState,
                     onRefresh = { viewModel.onRefresh() }
                 ) {
-                    DayList(uiState.days)
-                   /* LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        when (uiState) {
-                            uiState.days.Error -> {
-                                homeSectionErrorText(R.string.section_error_top_rated)
-                            }
-                            TopRatedMoviesUiState.Loading -> {
-                                item {
-                                    LoadingIndicator()
-                                }
-                            }
-                            is TopRatedMoviesUiState.Success -> {
-                                items(uiState.movies) { movie ->
-                                    HomePosterImage(movie)
-                                }
-                            }
-                        }*/
-                        /*items(state.days.size) { i ->
-                            val day = state.days[i]
-                            DayItem(
-                                day = day,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
+                    DayList(uiState.days, navController)
+                }
 
-                            ) {
-                                navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
-                            }
-                        }*/
-                    }
-                //}
-               /* if (state.errorMessage != null) {
-                    Snackbar(
-                        action = {
-                            Button(onClick = {
-                                viewModel.onEvent(DayListingsEvent.CloseErrorMessage)
-                            }) {
-                                Text("Close")
-                            }
-                        },
-                        modifier = Modifier.padding(16.dp)
-                    ) { Text(text = state.errorMessage) }
-                }*/
-
-              /*  if (uiState.isLoading) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(80.dp, 80.dp)
-                        )
-                    }
-                }*/
             }
 
         )
@@ -124,7 +69,7 @@ fun DayListingScreen(
 }
 
 @Composable
-fun DayList(uiState: DaysUiState) {
+fun DayList(uiState: DaysUiState, navController: NavController) {
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
@@ -149,7 +94,7 @@ fun DayList(uiState: DaysUiState) {
                             .padding(16.dp)
 
                     ) {
-                        //navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
+                        navController.navigate(Screen.PhotoListingScreen.route + "/" + day.date)
                     }
                 }
             }
