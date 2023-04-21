@@ -77,7 +77,7 @@ fun DayList(uiState: DaysUiState, navController: NavController) {
     ) {
         when (uiState) {
             DaysUiState.Error -> {
-                homeSectionErrorText(R.string.section_error_top_rated)
+                homeSectionErrorText(R.string.section_error_days)
             }
             DaysUiState.Loading -> {
                 item {
