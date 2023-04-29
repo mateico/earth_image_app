@@ -1,5 +1,7 @@
 package com.example.earthimagesapp.presentation.day_listing
 
+import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
@@ -23,6 +25,7 @@ import com.example.earthimagesapp.presentation.Screen
 import com.example.earthimagesapplication.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import timber.log.Timber
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +34,7 @@ fun DayListingScreen(
     navController: NavController
 ) {
 
-
+    val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState: DayListingState by viewModel.uiState.collectAsState()
     //val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onRefresh() })
@@ -64,10 +67,11 @@ fun DayListingScreen(
                     onRefresh = { viewModel.onRefresh() }
                 ) {
                     DayList(uiState.days, navController)
-                    FloatingActionButton()
+
                 }
 
-            }
+            }, floatingActionButton = {FloatingActionButton(context)}
+
 
         )
     }
@@ -142,17 +146,16 @@ fun ErrorText(
 }
 
 @Composable
-fun FloatingActionButton() {
-    val context = LocalContext.current
+fun FloatingActionButton(context: Context) {
     FloatingActionButton(onClick = {
-        Toast.makeText(context, "clicked", Toast.LENGTH_LONG).show()
+        Timber.d("tag", "Button Clicked")
     }) {
         Icon(Icons.Filled.Download, "")
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = false)
 @Composable
 fun FloatingActionButtonPreview(){
-    FloatingActionButton()
+    FloatingActionButton( LocalContext.current)
 }
