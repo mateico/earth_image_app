@@ -42,7 +42,7 @@ class DayListingsViewModel @Inject constructor(
     private val repository: EarthImagesRepository
 ) : ViewModel() {
 
-    val exceptionHandler = CoroutineExceptionHandler { context, exception ->
+    private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
         viewModelScope.launch {
             isError.emit(true)
         }
@@ -52,7 +52,6 @@ class DayListingsViewModel @Inject constructor(
         repository.getDays().asResult()
 
     private val isRefreshing = MutableStateFlow(false)
-
     private val isError = MutableStateFlow(false)
 
     //var state by mutableStateOf(DayListingsState())
@@ -62,7 +61,7 @@ class DayListingsViewModel @Inject constructor(
         days,
         isRefreshing,
         isError
-    ) {daysResult, isRefreshing,isError ->
+    ) {daysResult, isRefreshing, isError ->
 
         val days: DaysUiState = when (daysResult) {
             is Result.Success -> DaysUiState.Success(daysResult.data)
@@ -92,9 +91,7 @@ class DayListingsViewModel @Inject constructor(
                 val refreshDaysDeferred = async { refreshDays() }
                 isRefreshing.emit(true)
                 try {
-                    awaitAll(
-                        refreshDaysDeferred
-                    )
+                    awaitAll(refreshDaysDeferred)
                 } finally {
                     isRefreshing.emit(false)
                 }

@@ -31,6 +31,7 @@ fun DayListingScreen(
 
     val snackBarHostState = remember { SnackbarHostState() }
     val uiState: DayListingState by viewModel.uiState.collectAsState()
+    //val pullRefreshState = rememberPullRefreshState(refreshing, { viewModel.onRefresh() })
     val errorMessage = stringResource(id = R.string.error_text)
     val okText = stringResource(id = R.string.ok_button_text)
 

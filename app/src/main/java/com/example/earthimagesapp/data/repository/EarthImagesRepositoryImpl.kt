@@ -28,15 +28,14 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
     private val dayDao = db.dayDao
     private val imageDataDao = db.imageDataDao
-    override fun getDays(): Flow<List<Day>> {
-        return dayDao.getDaysStream().map { entityDay ->
-            entityDay.map(DayEntity::toDay)
+
+    override fun getDays(): Flow<List<Day>> =
+        dayDao.getDaysStream().map { entityDays ->
+            entityDays.map { it.toDay() }
         }.onEach {
-            if (it.isEmpty()) {
-                refreshDays()
-            }
+            if (it.isEmpty()) refreshDays()
         }
-    }
+
 
     override suspend fun refreshDays() {
         api.getDays()
