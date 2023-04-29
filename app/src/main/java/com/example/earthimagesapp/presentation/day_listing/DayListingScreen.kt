@@ -1,15 +1,20 @@
 package com.example.earthimagesapp.presentation.day_listing
 
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -59,6 +64,7 @@ fun DayListingScreen(
                     onRefresh = { viewModel.onRefresh() }
                 ) {
                     DayList(uiState.days, navController)
+                    FloatingActionButton()
                 }
 
             }
@@ -133,4 +139,20 @@ fun ErrorText(
         text = stringResource(id = title),
         modifier = modifier.padding(vertical = 24.dp)
     )
+}
+
+@Composable
+fun FloatingActionButton() {
+    val context = LocalContext.current
+    FloatingActionButton(onClick = {
+        Toast.makeText(context, "clicked", Toast.LENGTH_LONG).show()
+    }) {
+        Icon(Icons.Filled.Download, "")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FloatingActionButtonPreview(){
+    FloatingActionButton()
 }
