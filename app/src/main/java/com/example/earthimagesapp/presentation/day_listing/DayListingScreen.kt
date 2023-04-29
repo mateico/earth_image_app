@@ -18,11 +18,9 @@ import com.example.earthimagesapp.presentation.Screen
 import com.example.earthimagesapplication.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 fun DayListingScreen(
     viewModel: DayListingsViewModel = hiltViewModel(),
     navController: NavController

@@ -26,11 +26,9 @@ import com.example.earthimagesapp.presentation.Screen
 import com.example.earthimagesapp.util.IMAGE_PATH_START
 import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
-import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 fun ImageListingScreen(
     viewModel: ImageListingsViewModel = hiltViewModel(),
     navController: NavController

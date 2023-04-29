@@ -16,13 +16,9 @@ import androidx.navigation.NavController
 import com.example.earthimagesapp.presentation.Screen
 import com.example.earthimagesapp.util.SPLASH_DELAY_TIME_MILLIS
 import com.example.earthimagesapplication.R
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import kotlinx.coroutines.delay
 
 @Composable
-@RootNavGraph(start = true)
-@Destination
 fun SplashScreen(navController: NavController) {
     val scale = remember {
         androidx.compose.animation.core.Animatable(0f)

@@ -25,13 +25,11 @@ import coil.request.ImageRequest
 import com.example.earthimagesapp.util.IMAGE_PATH_START
 import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
-import com.ramcosta.composedestinations.annotation.Destination
 import java.lang.Math.*
 import kotlin.math.roundToInt
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-@Destination
 fun PhotoScreen(
     viewModel: PhotoScreenViewModel = hiltViewModel(),
     navController: NavController
