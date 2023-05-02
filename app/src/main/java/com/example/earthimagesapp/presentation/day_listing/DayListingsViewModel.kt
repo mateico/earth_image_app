@@ -21,6 +21,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -39,8 +40,11 @@ sealed interface DaysUiState {
 
 @HiltViewModel
 class DayListingsViewModel @Inject constructor(
-    private val repository: EarthImagesRepository
+    private val repository: EarthImagesRepository,
+    private val workManager: WorkManager
 ) : ViewModel() {
+
+    //val workInfo = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
 
     private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
         viewModelScope.launch {
@@ -55,7 +59,7 @@ class DayListingsViewModel @Inject constructor(
     private val isError = MutableStateFlow(false)
 
     //var state by mutableStateOf(DayListingsState())
-    //private val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
+    private val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
 
     val uiState: StateFlow<DayListingState> = combine(
         days,
@@ -88,10 +92,10 @@ class DayListingsViewModel @Inject constructor(
     fun onRefresh() {
         viewModelScope.launch(exceptionHandler) {
             with(repository) {
-                val refreshDaysDeferred = async { refreshDays() }
                 isRefreshing.emit(true)
                 try {
-                    awaitAll(refreshDaysDeferred)
+                    refreshDays()
+                    getImageDataByDayFromRemote()
                 } finally {
                     isRefreshing.emit(false)
                 }
@@ -105,11 +109,7 @@ class DayListingsViewModel @Inject constructor(
         }
     }
 
-    /*init {
-        //getData()
-    }
-
-    private fun downloadImages() {
+    fun downloadImages() {
         viewModelScope.launch {
             repository.getListImagesToDownload().collect { result ->
                 result.data?.forEach { url ->
@@ -129,14 +129,22 @@ class DayListingsViewModel @Inject constructor(
                     )
                 }
             }
-            WorkManager.getInstance().enqueue(mutableListWorkRequest)
+            workManager.enqueue(mutableListWorkRequest)
 
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            state = state.copy(isLoading = false)
+            DaysUiState.Loading.equals(true)
         }, 3000)
     }
+
+
+
+    /*init {
+        //getData()
+    }
+
+
 
     fun onEvent(event: DayListingsEvent) {
         when (event) {

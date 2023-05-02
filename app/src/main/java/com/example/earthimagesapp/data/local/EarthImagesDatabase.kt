@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
     entities = [
         DayEntity::class,
         ImageDataEntity::class],
-    version = 13
+    version = 14
 )
 @TypeConverters(Converters::class)
 

@@ -3,19 +3,23 @@ package com.example.earthimagesapp.workers
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.example.earthimagesapp.util.KEY_IMAGE_PATH
 import com.example.earthimagesapp.util.KEY_IMAGE_URL
 import com.example.earthimagesapp.util.URL_SEPARATOR_CHARACTER
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
-class WordManagerDownloadImage(
-    appContext: Context,
-    workerParams: WorkerParameters
+@HiltWorker
+class WordManagerDownloadImage @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters
 ) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {

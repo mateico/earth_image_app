@@ -1,6 +1,5 @@
 package com.example.earthimagesapp.data.repository
 
-import com.example.earthimagesapp.data.local.DayEntity
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.mapper.toDay
 import com.example.earthimagesapp.data.mapper.toDayEntity
@@ -89,15 +88,14 @@ class EarthImagesRepositoryImpl @Inject constructor(
 
     }*/
 
-    override suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>> {
+    override suspend fun getImageDataByDayFromRemote() {
 
-        return flow {
+
             dayDao.getDaysStream().collect { result ->
-                val localDayListing = result
                 var index = 0;
-                while (index < localDayListing.size) {
+                while (index < result.size) {
                     val remoteImagesByDayListings = try {
-                        api.getImagesData("date/${localDayListing[index++].date}")
+                        api.getImagesData("date/${result[index++].date}")
                     } catch (e: IOException) {
                         e.printStackTrace()
                         null
@@ -115,14 +113,10 @@ class EarthImagesRepositoryImpl @Inject constructor(
                         )
                     }
 
-                    emit(
-                        Resource.Success(
-                            data = index
-                        )
-                    )
+
                 }
             }
-        }
+
     }
 
 

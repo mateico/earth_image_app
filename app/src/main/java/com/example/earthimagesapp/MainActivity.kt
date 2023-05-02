@@ -18,6 +18,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             EarthImagesApplicationTheme {
 
+
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

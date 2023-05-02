@@ -12,7 +12,7 @@ interface EarthImagesRepository {
 
     suspend fun refreshDays()
 
-    suspend fun getImageDataByDayFromRemote(): Flow<Resource<Int>>
+    suspend fun getImageDataByDayFromRemote()
 
     suspend fun getImageDataByDayFromLocal(day: String): Flow<Resource<List<ImageData>>>
 

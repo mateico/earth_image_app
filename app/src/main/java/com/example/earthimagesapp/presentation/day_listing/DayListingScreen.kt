@@ -1,8 +1,5 @@
 package com.example.earthimagesapp.presentation.day_listing
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.work.*
 import com.example.earthimagesapp.presentation.Screen
@@ -33,6 +31,8 @@ fun DayListingScreen(
     viewModel: DayListingsViewModel = hiltViewModel(),
     navController: NavController
 ) {
+
+
 
     val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
@@ -70,7 +70,8 @@ fun DayListingScreen(
 
                 }
 
-            }, floatingActionButton = {FloatingActionButton(context)}
+            },
+            floatingActionButton = { FloatingActionButton(onClick = { viewModel.downloadImages() }) }
 
 
         )
@@ -88,11 +89,13 @@ fun DayList(uiState: DaysUiState, navController: NavController) {
             DaysUiState.Error -> {
                 homeSectionErrorText(R.string.section_error_days)
             }
+
             DaysUiState.Loading -> {
                 item {
                     LoadingIndicator()
                 }
             }
+
             is DaysUiState.Success -> {
                 items(uiState.days.size) { i ->
                     val day = uiState.days[i]
@@ -146,16 +149,18 @@ fun ErrorText(
 }
 
 @Composable
-fun FloatingActionButton(context: Context) {
-    FloatingActionButton(onClick = {
-        Timber.d("tag", "Button Clicked")
-    }) {
+fun FloatingActionButton(onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = {
+            onClick()
+        }
+    ) {
         Icon(Icons.Filled.Download, "")
     }
 }
 
 @Preview(showBackground = false)
 @Composable
-fun FloatingActionButtonPreview(){
-    FloatingActionButton( LocalContext.current)
+fun FloatingActionButtonPreview() {
+    //FloatingActionButton()
 }
