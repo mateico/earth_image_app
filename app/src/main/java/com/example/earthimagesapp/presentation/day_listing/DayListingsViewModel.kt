@@ -7,6 +7,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,7 +45,18 @@ class DayListingsViewModel @Inject constructor(
     private val workManager: WorkManager
 ) : ViewModel() {
 
-    //val workInfo = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+    val workInfo = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+    //internal val workInfo: LiveData<List<WorkInfo>>
+
+   /* val workInfo2 = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
+    .observe(viewLifecycleOwner) { workInfo ->
+        if(workInfo?.state == WorkInfo.State.SUCCEEDED) {
+            Snackbar.make(requireView(),
+                R.string.work_completed, Snackbar.LENGTH_SHORT)
+                .show()
+        }
+    }
+*/
 
     private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
         viewModelScope.launch {
@@ -120,22 +132,24 @@ class DayListingsViewModel @Inject constructor(
                                 Constraints.Builder()
                                     .setRequiredNetworkType(NetworkType.CONNECTED)
                                     .build()
-                            )
-                            .setBackoffCriteria(
+                            //)
+                           /* .setBackoffCriteria(
                                 BackoffPolicy.LINEAR,
                                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                                TimeUnit.MILLISECONDS
-                            ).build()
+                                TimeUnit.MILLISECONDS*/
+                            )
+                            .addTag(TAG_OUTPUT)
+                            .build()
                     )
                 }
             }
             workManager.enqueue(mutableListWorkRequest)
 
         }
-
+/*
         Handler(Looper.getMainLooper()).postDelayed({
             DaysUiState.Loading.equals(true)
-        }, 3000)
+        }, 3000)*/
     }
 
 

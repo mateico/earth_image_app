@@ -23,10 +23,17 @@ class WordManagerDownloadImage @AssistedInject constructor(
 ) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
+
+        val appContext = applicationContext
+
         return try {
             val imageUrl = inputData.getString(KEY_IMAGE_URL)
             val filePath = if (imageUrl != null) downloadImage(imageUrl) else ""
             val outputData = workDataOf(KEY_IMAGE_PATH to filePath)
+
+            createForegroundInfo("Image downloading ${imageUrl!!.subSequence(imageUrl!!.length-15, imageUrl!!.length-1)}", appContext)
+
+
             Result.success(outputData)
         } catch (e: Exception) {
             Result.failure()

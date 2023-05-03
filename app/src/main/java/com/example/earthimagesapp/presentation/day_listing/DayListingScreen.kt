@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.work.*
 import com.example.earthimagesapp.presentation.Screen
+import com.example.earthimagesapp.util.TAG_OUTPUT
 import com.example.earthimagesapplication.R
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -32,7 +34,10 @@ fun DayListingScreen(
     navController: NavController
 ) {
 
-
+    //val workInfo = viewModel.workInfo.observeAsState().value
+    /*val downloadInfo = remember(workInfo) {
+        workInfo?.find { it.tags.contains(TAG_OUTPUT) }
+    }*/
 
     val context = LocalContext.current
     val snackBarHostState = remember { SnackbarHostState() }
@@ -69,12 +74,24 @@ fun DayListingScreen(
                     DayList(uiState.days, navController)
 
                 }
+               /* when (downloadInfo?.state) {
+                    WorkInfo.State.CANCELLED -> Text(text = "Download cancelled")
+                    WorkInfo.State.ENQUEUED -> Text(text = "Download enqueued")
+                    WorkInfo.State.RUNNING -> Text(text = "Downloading")
+                    WorkInfo.State.SUCCEEDED -> Text(text = "Download succeeded")
+                    WorkInfo.State.FAILED -> Text(text = "Download failed")
+                    WorkInfo.State.BLOCKED -> Text(text = "Download blocked")
+                    else -> Text(text = "Something wrong happened")
+                }*/
+
+
 
             },
             floatingActionButton = { FloatingActionButton(onClick = { viewModel.downloadImages() }) }
 
 
         )
+
     }
 }
 
