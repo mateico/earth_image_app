@@ -49,6 +49,7 @@ fun ImageListingScreen(
                 }
             }
         )
+
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),
             content = {
@@ -63,7 +64,8 @@ fun ImageListingScreen(
                         contentAlignment = Alignment.Center
                     ) {
 
-                        /*AsyncImage(
+
+                        AsyncImage(
                             modifier = Modifier
                                 .width(200.dp)
                                 .height(200.dp)
@@ -71,33 +73,24 @@ fun ImageListingScreen(
 
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(
-                                    "$IMAGE_PATH_START${image.identifier}$IMAGE_TYPE"
+                                    "https://epic.gsfc.nasa.gov/archive/enhanced/${
+                                        DateUtils.formatDateToGetImage(
+                                            image.date
+                                        )
+                                    }/png/epic_RGB_${image.identifier}.png"
                                 )
                                 .crossfade(true)
                                 .build(),
                             placeholder = painterResource(R.drawable.placeholder),
-                            error = painterResource(R.drawable.baseline_satellite_24),
-                            contentDescription = "This is the description",
-                            contentScale = ContentScale.Crop
-
-                        )*/
-
-                        AsyncImage(
-                            modifier = Modifier
-                                .width(50.dp)
-                                .height(50.dp)
-                                .clip(CircleShape),
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
-                                .crossfade(true)
-                                .build(),
-                            placeholder = painterResource(com.example.earthimagesapplication.R.drawable.placeholder),
                             contentDescription = "This is the description",
                             contentScale = ContentScale.Crop
 
                         )
+
                     }
                 }
             })
+
     }
+
 }
