@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.earthimagesapp.util.DateUtils
 import com.example.earthimagesapp.util.IMAGE_PATH_START
 import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
@@ -70,13 +71,18 @@ fun PhotoScreen(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(
-                            "$IMAGE_PATH_START${state.photo?.identifier}$IMAGE_TYPE"
+                            "https://epic.gsfc.nasa.gov/archive/enhanced/${
+                                state.photo?.let {
+                                    DateUtils.formatDateToGetImage(
+                                        it.date
+                                    )
+                                }
+                            }/png/epic_RGB_${state.photo?.identifier}.png"
                         )
                         .crossfade(true)
                         .build(),
                     contentDescription = "contentDescription",
                     contentScale = ContentScale.Fit,
-                    error = painterResource(R.drawable.baseline_satellite_24),
                     modifier = Modifier
                         .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
                         .graphicsLayer(
