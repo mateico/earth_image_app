@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -23,6 +24,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.earthimagesapp.presentation.Screen
+import com.example.earthimagesapp.util.DateUtils
 import com.example.earthimagesapp.util.IMAGE_PATH_START
 import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
@@ -61,7 +63,7 @@ fun ImageListingScreen(
                         contentAlignment = Alignment.Center
                     ) {
 
-                        AsyncImage(
+                        /*AsyncImage(
                             modifier = Modifier
                                 .width(200.dp)
                                 .height(200.dp)
@@ -75,6 +77,21 @@ fun ImageListingScreen(
                                 .build(),
                             placeholder = painterResource(R.drawable.placeholder),
                             error = painterResource(R.drawable.baseline_satellite_24),
+                            contentDescription = "This is the description",
+                            contentScale = ContentScale.Crop
+
+                        )*/
+
+                        AsyncImage(
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(50.dp)
+                                .clip(CircleShape),
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data("https://epic.gsfc.nasa.gov/archive/enhanced/${DateUtils.formatDateToGetImage(image.date)}/png/epic_RGB_${image.identifier}.png")
+                                .crossfade(true)
+                                .build(),
+                            placeholder = painterResource(com.example.earthimagesapplication.R.drawable.placeholder),
                             contentDescription = "This is the description",
                             contentScale = ContentScale.Crop
 
