@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class DayRepositoryImpl @Inject constructor(
-    private val db: EarthImagesDatabase,
+    db: EarthImagesDatabase,
     private val api: EarthImagesApi
 ): DayRepository {
 

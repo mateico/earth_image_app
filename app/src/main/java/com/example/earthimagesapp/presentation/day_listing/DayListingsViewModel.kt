@@ -83,6 +83,7 @@ class DayListingsViewModel @Inject constructor(
                 isRefreshing.emit(true)
                 try {
                     getDaysFromRemote()
+                    isRefreshing.emit(false)
                     dayDataRepository.getImageDataByDayFromRemote()
                 } finally {
                     isRefreshing.emit(false)

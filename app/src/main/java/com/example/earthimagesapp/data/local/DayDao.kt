@@ -15,5 +15,6 @@ interface DayDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreDays(days: List<DayEntity>)
 
-
+    @Update
+    suspend fun updateDay(day: DayEntity)
 }
