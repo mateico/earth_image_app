@@ -28,7 +28,6 @@ class DayRepositoryImpl @Inject constructor(
 
     override suspend fun getDaysFromRemote() {
         api.getDays()
-            .shuffled()
             .also { dayDtos ->
                 dayDao.insertOrIgnoreDays(days = dayDtos.map(DayDto::toDayEntity))
             }

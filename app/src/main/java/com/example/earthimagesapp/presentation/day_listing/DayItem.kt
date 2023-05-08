@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.earthimagesapp.domain.model.Day
+import com.example.earthimagesapp.util.DateUtils
 
 @Composable
 fun DayItem(
@@ -27,7 +28,7 @@ fun DayItem(
                 .padding(12.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = day.date)
+            Text(text = DateUtils.dateFormatForDayList(day.date))
         }
     }
 }

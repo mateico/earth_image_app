@@ -11,4 +11,11 @@ object DateUtils {
         return output.format(dateValue)
     }
 
+    fun dateFormatForDayList(date: String): String {
+        val input = SimpleDateFormat("yyyy-MM-dd")
+        val dateValue: Date = input.parse(date)
+        val output = SimpleDateFormat("MMMM dd, yyyy")
+        return output.format(dateValue)
+    }
+
 }
