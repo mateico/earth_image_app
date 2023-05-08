@@ -14,7 +14,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -23,8 +22,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.earthimagesapp.util.DateUtils
-import com.example.earthimagesapp.util.IMAGE_PATH_START
-import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
 import java.lang.Math.*
 import kotlin.math.roundToInt

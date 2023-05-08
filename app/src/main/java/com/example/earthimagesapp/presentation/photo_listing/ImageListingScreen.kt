@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -25,8 +24,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.earthimagesapp.presentation.Screen
 import com.example.earthimagesapp.util.DateUtils
-import com.example.earthimagesapp.util.IMAGE_PATH_START
-import com.example.earthimagesapp.util.IMAGE_TYPE
 import com.example.earthimagesapplication.R
 
 @Composable

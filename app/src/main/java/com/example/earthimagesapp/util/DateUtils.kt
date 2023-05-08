@@ -1,7 +1,7 @@
 package com.example.earthimagesapp.util
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 object DateUtils {
     fun formatDateToGetImage(date: String): String {

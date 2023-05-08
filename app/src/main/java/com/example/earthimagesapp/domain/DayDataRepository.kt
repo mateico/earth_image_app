@@ -10,8 +10,6 @@ interface DayDataRepository {
 
     suspend fun getImageDataByDayFromLocal(day: String): Flow<Resource<List<ImageData>>>
 
-    suspend fun getListImagesToDownload(): Flow<Resource<List<String>>>
-
     suspend fun getPhotoDataById(id: String): Flow<Resource<ImageData>>
 
 }

@@ -3,8 +3,6 @@ package com.example.earthimagesapp.data.local
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.example.earthimagesapp.domain.model.CentroIdCoordinates
-import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.flow.emptyFlow
 
 @ProvidedTypeConverter
 class Converters(

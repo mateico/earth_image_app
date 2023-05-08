@@ -3,15 +3,19 @@ package com.example.earthimagesapp.presentation.day_listing
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.*
 import com.example.earthimagesapp.domain.DayDataRepository
 import com.example.earthimagesapp.domain.DayRepository
 import com.example.earthimagesapp.domain.model.Day
-import com.example.earthimagesapp.util.*
-import com.example.earthimagesapp.workers.WordManagerDownloadImage
+import com.example.earthimagesapp.util.Result
+import com.example.earthimagesapp.util.WhileUiSubscribed
+import com.example.earthimagesapp.util.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,8 +35,7 @@ sealed interface DaysUiState {
 @HiltViewModel
 class DayListingsViewModel @Inject constructor(
     private val dayRepository: DayRepository,
-    private val dayDataRepository: DayDataRepository,
-    private val workManager: WorkManager
+    private val dayDataRepository: DayDataRepository
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
@@ -45,7 +48,6 @@ class DayListingsViewModel @Inject constructor(
     private val isRefreshing = MutableStateFlow(false)
     private val isError = MutableStateFlow(false)
 
-    private val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
 
     val uiState: StateFlow<DayListingState> = combine(
         days,
@@ -92,28 +94,6 @@ class DayListingsViewModel @Inject constructor(
     fun onErrorConsumed() {
         viewModelScope.launch {
             isError.emit(false)
-        }
-    }
-
-    fun downloadImages() {
-        viewModelScope.launch {
-            dayDataRepository.getListImagesToDownload().collect { result ->
-                result.data?.forEach { url ->
-                    mutableListWorkRequest.add(
-                        OneTimeWorkRequestBuilder<WordManagerDownloadImage>()
-                            .setInputData(workDataOf(KEY_IMAGE_URL to url))
-                            .setConstraints(
-                                Constraints.Builder()
-                                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                                    .build()
-
-                            )
-                            .addTag(TAG_OUTPUT)
-                            .build()
-                    )
-                }
-            }
-            workManager.enqueue(mutableListWorkRequest)
         }
     }
 }

@@ -5,10 +5,6 @@ import com.example.earthimagesapp.data.mapper.toImageData
 import com.example.earthimagesapp.data.remote.EarthImagesApi
 import com.example.earthimagesapp.domain.DayDataRepository
 import com.example.earthimagesapp.domain.model.ImageData
-import com.example.earthimagesapp.util.DateUtils
-import com.example.earthimagesapp.util.IMAGE_TYPE
-import com.example.earthimagesapp.util.IMAGE_URI_MIDDLE
-import com.example.earthimagesapp.util.IMAGE_URI_START
 import com.example.earthimagesapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -59,27 +55,6 @@ class DayDataRepositoryImpl @Inject constructor(
             emit(
                 Resource.Success(
                 data = localImagesByDayListing.map { it.toImageData() }
-            ))
-
-            emit(Resource.Loading(false))
-            return@flow
-        }
-    }
-
-    override suspend fun getListImagesToDownload(): Flow<Resource<List<String>>> {
-        return flow {
-            val imageEntities = imageDataDao.getImagesByDayListing()
-
-            emit(
-                Resource.Success(
-                data = imageEntities.map {
-                    "$IMAGE_URI_START${
-                        DateUtils.formatDateToGetImage(
-                            it.date
-                        )
-                    }$IMAGE_URI_MIDDLE${it.identifier}$IMAGE_TYPE"
-                }
-
             ))
 
             emit(Resource.Loading(false))

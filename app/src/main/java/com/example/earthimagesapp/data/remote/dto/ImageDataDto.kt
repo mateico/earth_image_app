@@ -2,7 +2,6 @@ package com.example.earthimagesapp.data.remote.dto
 
 import com.example.earthimagesapp.data.local.ImageDataEntity
 import com.example.earthimagesapp.domain.model.CentroIdCoordinates
-import com.google.gson.annotations.SerializedName
 
 data class ImageDataDto(
     val caption: String,
