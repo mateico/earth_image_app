@@ -85,8 +85,7 @@ fun DayListingScreen(
                  }*/
 
 
-            },
-            floatingActionButton = { FloatingActionButton(onClick = { viewModel.downloadImages() }) }
+            }
 
 
         )
@@ -164,19 +163,4 @@ fun ErrorText(
     )
 }
 
-@Composable
-fun FloatingActionButton(onClick: () -> Unit) {
-    FloatingActionButton(
-        onClick = {
-            onClick()
-        }
-    ) {
-        Icon(Icons.Filled.Download, "")
-    }
-}
 
-@Preview(showBackground = false)
-@Composable
-fun FloatingActionButtonPreview() {
-    //FloatingActionButton()
-}
