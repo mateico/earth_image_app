@@ -1,16 +1,8 @@
 package com.example.earthimagesapp.presentation.day_listing
 
-import android.app.Application
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.*
 import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
@@ -18,13 +10,8 @@ import com.example.earthimagesapp.util.*
 import com.example.earthimagesapp.workers.WordManagerDownloadImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 data class DayListingState(
@@ -32,9 +19,10 @@ data class DayListingState(
     val isRefreshing: Boolean,
     val isError: Boolean
 )
+
 @Immutable
 sealed interface DaysUiState {
-    data class Success(val days: List<Day>): DaysUiState
+    data class Success(val days: List<Day>) : DaysUiState
     object Error : DaysUiState
     object Loading : DaysUiState
 }
@@ -45,39 +33,23 @@ class DayListingsViewModel @Inject constructor(
     private val workManager: WorkManager
 ) : ViewModel() {
 
-    val workInfo = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
-    //internal val workInfo: LiveData<List<WorkInfo>>
-
-   /* val workInfo2 = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
-    .observe(viewLifecycleOwner) { workInfo ->
-        if(workInfo?.state == WorkInfo.State.SUCCEEDED) {
-            Snackbar.make(requireView(),
-                R.string.work_completed, Snackbar.LENGTH_SHORT)
-                .show()
-        }
-    }
-*/
-
-    private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         viewModelScope.launch {
             isError.emit(true)
         }
     }
 
-    private val days: Flow<Result<List<Day>>> =
-        repository.getDays().asResult()
-
+    private val days: Flow<Result<List<Day>>> = repository.getDaysFromLocal().asResult()
     private val isRefreshing = MutableStateFlow(false)
     private val isError = MutableStateFlow(false)
 
-    //var state by mutableStateOf(DayListingsState())
     private val mutableListWorkRequest: MutableList<WorkRequest> = mutableListOf()
 
     val uiState: StateFlow<DayListingState> = combine(
         days,
         isRefreshing,
         isError
-    ) {daysResult, isRefreshing, isError ->
+    ) { daysResult, isRefreshing, isError ->
 
         val days: DaysUiState = when (daysResult) {
             is Result.Success -> DaysUiState.Success(daysResult.data)
@@ -91,7 +63,7 @@ class DayListingsViewModel @Inject constructor(
             isError
         )
 
-    } .stateIn(
+    }.stateIn(
         scope = viewModelScope,
         started = WhileUiSubscribed,
         initialValue = DayListingState(
@@ -106,7 +78,7 @@ class DayListingsViewModel @Inject constructor(
             with(repository) {
                 isRefreshing.emit(true)
                 try {
-                    refreshDays()
+                    getDaysFromRemote()
                     getImageDataByDayFromRemote()
                 } finally {
                     isRefreshing.emit(false)
@@ -132,11 +104,7 @@ class DayListingsViewModel @Inject constructor(
                                 Constraints.Builder()
                                     .setRequiredNetworkType(NetworkType.CONNECTED)
                                     .build()
-                            //)
-                           /* .setBackoffCriteria(
-                                BackoffPolicy.LINEAR,
-                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
-                                TimeUnit.MILLISECONDS*/
+
                             )
                             .addTag(TAG_OUTPUT)
                             .build()
@@ -144,97 +112,6 @@ class DayListingsViewModel @Inject constructor(
                 }
             }
             workManager.enqueue(mutableListWorkRequest)
-
-        }
-/*
-        Handler(Looper.getMainLooper()).postDelayed({
-            DaysUiState.Loading.equals(true)
-        }, 3000)*/
-    }
-
-
-
-    /*init {
-        //getData()
-    }
-
-
-
-    fun onEvent(event: DayListingsEvent) {
-        when (event) {
-            is DayListingsEvent.Refresh -> {
-                // do refresh
-            }
-            is DayListingsEvent.CloseErrorMessage -> {
-                state = state.copy(errorMessage = null)
-            }
         }
     }
-
-    private fun getData() {
-        getDayListings()
-    }
-
-    private fun getDayListings() {
-        Timber.d("getting day")
-        viewModelScope.launch {
-            repository
-                .getDays()
-                .collect { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            result.data?.let { listings ->
-                                state = state.copy(
-                                    days = listings
-                                )
-                            }
-                            getImagesData()
-                        }
-
-                        is Error -> {
-                            Timber.e("Error loading list")
-                            state = state.copy(errorMessage = result.message)
-                        }
-
-                        is Resource.Loading -> {
-                            state = state.copy(isLoading = result.isLoading)
-                        }
-                        else -> {
-                            state = state.copy(errorMessage = "Error getting the list of days")
-                            state = state.copy(isLoading = false)
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun getImagesData() {
-        viewModelScope.launch {
-            repository
-                .getImageDataByDayFromRemote()
-                .collect { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            result.data?.let { index ->
-                                if (index == 10) {
-                                    downloadImages()
-                                }
-                            }
-                        }
-
-                        is Error -> {
-                            Timber.e("Error loading list")
-                            state = state.copy(errorMessage = result.message)
-                        }
-
-                        is Resource.Loading -> {
-                            //state = state.copy(isLoading = result.isLoading)
-                        }
-                        else -> {
-                            state = state.copy(errorMessage = "Error getting the list of days")
-                        }
-                    }
-                }
-        }
-    }*/
 }

@@ -74,16 +74,15 @@ fun DayListingScreen(
                     DayList(uiState.days, navController)
 
                 }
-               /* when (downloadInfo?.state) {
-                    WorkInfo.State.CANCELLED -> Text(text = "Download cancelled")
-                    WorkInfo.State.ENQUEUED -> Text(text = "Download enqueued")
-                    WorkInfo.State.RUNNING -> Text(text = "Downloading")
-                    WorkInfo.State.SUCCEEDED -> Text(text = "Download succeeded")
-                    WorkInfo.State.FAILED -> Text(text = "Download failed")
-                    WorkInfo.State.BLOCKED -> Text(text = "Download blocked")
-                    else -> Text(text = "Something wrong happened")
-                }*/
-
+                /* when (downloadInfo?.state) {
+                     WorkInfo.State.CANCELLED -> Text(text = "Download cancelled")
+                     WorkInfo.State.ENQUEUED -> Text(text = "Download enqueued")
+                     WorkInfo.State.RUNNING -> Text(text = "Downloading")
+                     WorkInfo.State.SUCCEEDED -> Text(text = "Download succeeded")
+                     WorkInfo.State.FAILED -> Text(text = "Download failed")
+                     WorkInfo.State.BLOCKED -> Text(text = "Download blocked")
+                     else -> Text(text = "Something wrong happened")
+                 }*/
 
 
             },

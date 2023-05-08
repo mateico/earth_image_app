@@ -28,65 +28,20 @@ class EarthImagesRepositoryImpl @Inject constructor(
     private val dayDao = db.dayDao
     private val imageDataDao = db.imageDataDao
 
-    override fun getDays(): Flow<List<Day>> =
+    override fun getDaysFromLocal(): Flow<List<Day>> =
         dayDao.getDaysStream().map { entityDays ->
             entityDays.map { it.toDay() }
         }.onEach {
-            if (it.isEmpty()) refreshDays()
+            if (it.isEmpty()) getDaysFromRemote()
         }
 
-
-    override suspend fun refreshDays() {
+    override suspend fun getDaysFromRemote() {
         api.getDays()
             .shuffled()
             .also { dayDtos ->
                 dayDao.insertOrIgnoreDays(days = dayDtos.map(DayDto::toDayEntity))
             }
     }
-
-
-    /*override suspend fun getDays(): Flow<List<Day>> {
-
-
-            //emit(Resource.Loading(true))
-
-            val localDayListing = dayDao.getDayListing()
-
-            //localDayListing.collect {result ->
-               return dayDao.getDayListing().map { it.map (DayEntity::toDay)  }
-                //.map(DayEntity::toDay))
-            //}
-
-            val remoteDayListings = try {
-                api.getDays()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                return emit(Resource.Error("Please check your network connection"))
-                null
-            } catch (e: HttpException) {
-                e.printStackTrace()
-                emit(Resource.Error("Something went wrong"))
-                null
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emit(Resource.Error("Something went wrong"))
-                null
-            }
-
-            remoteDayListings?.let { dayListings ->
-
-                dayDao.insertDayListing(
-                    dayListings.map { it.toDayEntity() }
-                )
-
-                dayDao.getDayListing().collect {result ->
-                    emit(Resource.Success(data = result.map { it.toDay() }))
-                }
-
-            }
-
-
-    }*/
 
     override suspend fun getImageDataByDayFromRemote() {
 
@@ -118,7 +73,6 @@ class EarthImagesRepositoryImpl @Inject constructor(
             }
 
     }
-
 
     override suspend fun getImageDataByDayFromLocal(day: String): Flow<Resource<List<ImageData>>> {
 

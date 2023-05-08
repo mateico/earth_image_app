@@ -7,10 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface EarthImagesRepository {
 
-    fun getDays(): Flow<List<Day>>
+    fun getDaysFromLocal(): Flow<List<Day>>
 
-
-    suspend fun refreshDays()
+    suspend fun getDaysFromRemote()
 
     suspend fun getImageDataByDayFromRemote()
 
