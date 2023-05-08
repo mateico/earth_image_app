@@ -4,7 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
-import com.example.earthimagesapp.domain.EarthImagesRepository
+import com.example.earthimagesapp.domain.DayDataRepository
+import com.example.earthimagesapp.domain.DayRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.util.*
 import com.example.earthimagesapp.workers.WordManagerDownloadImage
@@ -29,7 +30,8 @@ sealed interface DaysUiState {
 
 @HiltViewModel
 class DayListingsViewModel @Inject constructor(
-    private val repository: EarthImagesRepository,
+    private val dayRepository: DayRepository,
+    private val dayDataRepository: DayDataRepository,
     private val workManager: WorkManager
 ) : ViewModel() {
 
@@ -39,7 +41,7 @@ class DayListingsViewModel @Inject constructor(
         }
     }
 
-    private val days: Flow<Result<List<Day>>> = repository.getDaysFromLocal().asResult()
+    private val days: Flow<Result<List<Day>>> = dayRepository.getDaysFromLocal().asResult()
     private val isRefreshing = MutableStateFlow(false)
     private val isError = MutableStateFlow(false)
 
@@ -75,11 +77,11 @@ class DayListingsViewModel @Inject constructor(
 
     fun onRefresh() {
         viewModelScope.launch(exceptionHandler) {
-            with(repository) {
+            with(dayRepository) {
                 isRefreshing.emit(true)
                 try {
                     getDaysFromRemote()
-                    getImageDataByDayFromRemote()
+                    dayDataRepository.getImageDataByDayFromRemote()
                 } finally {
                     isRefreshing.emit(false)
                 }
@@ -95,7 +97,7 @@ class DayListingsViewModel @Inject constructor(
 
     fun downloadImages() {
         viewModelScope.launch {
-            repository.getListImagesToDownload().collect { result ->
+            dayDataRepository.getListImagesToDownload().collect { result ->
                 result.data?.forEach { url ->
                     mutableListWorkRequest.add(
                         OneTimeWorkRequestBuilder<WordManagerDownloadImage>()

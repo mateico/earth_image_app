@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.earthimagesapp.domain.EarthImagesRepository
+import com.example.earthimagesapp.domain.DayDataRepository
 import com.example.earthimagesapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ImageListingsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val repository: EarthImagesRepository
+    private val repository: DayDataRepository
 ) : ViewModel() {
 
     var state by mutableStateOf(ImageListingsState())

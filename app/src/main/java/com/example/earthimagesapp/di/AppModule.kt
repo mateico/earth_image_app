@@ -6,8 +6,10 @@ import com.example.earthimagesapp.data.local.Converters
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.local.GsonParser
 import com.example.earthimagesapp.data.remote.EarthImagesApi
-import com.example.earthimagesapp.data.repository.EarthImagesRepositoryImpl
-import com.example.earthimagesapp.domain.EarthImagesRepository
+import com.example.earthimagesapp.data.repository.DayDataRepositoryImpl
+import com.example.earthimagesapp.data.repository.DayRepositoryImpl
+import com.example.earthimagesapp.domain.DayDataRepository
+import com.example.earthimagesapp.domain.DayRepository
 import com.example.earthimagesapplication.BuildConfig
 import com.google.gson.Gson
 import dagger.Module
@@ -28,11 +30,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideEarthImagesRepository(
+    fun provideDayRepository(
         db: EarthImagesDatabase,
         api: EarthImagesApi
-    ): EarthImagesRepository {
-        return EarthImagesRepositoryImpl(api, db)
+    ): DayRepository{
+        return DayRepositoryImpl(db, api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDayDataRepository(
+        db: EarthImagesDatabase,
+        api: EarthImagesApi
+    ): DayDataRepository {
+        return DayDataRepositoryImpl(db, api)
     }
 
 

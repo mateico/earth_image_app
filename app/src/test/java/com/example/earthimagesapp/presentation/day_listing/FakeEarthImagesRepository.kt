@@ -1,6 +1,5 @@
 package com.example.earthimagesapp.presentation.day_listing
 
-import com.example.earthimagesapp.domain.EarthImagesRepository
 import com.example.earthimagesapp.domain.model.Day
 import com.example.earthimagesapp.domain.model.ImageData
 import com.example.earthimagesapp.util.Resource
