@@ -23,7 +23,8 @@ class DayRepositoryImpl @Inject constructor(
         dayDao.getDaysStream().map { entityDays ->
             entityDays.map { it.toDay() }
         }.onEach {
-            if (it.isEmpty()) getDaysFromRemote()
+            if (it.isEmpty())
+                getDaysFromRemote()
         }
 
     override suspend fun getDaysFromRemote() {

@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.earthimagesapp.data.local.DayStatus
@@ -29,18 +31,26 @@ fun DayItem(
     Card(
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
-            .clickable { onClick() }
+            .clickable { if (day.status == DayStatus.WITH_DATA) onClick() else null}
     ) {
         Row(
             modifier = Modifier
                 .padding(12.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = DateUtils.dateFormatForDayList(day.date))
-            when(day.status){
-              DayStatus.EMPTY -> Dot(androidx.compose.ui.graphics.Color.Red)
-              DayStatus.LOADING -> Dot(androidx.compose.ui.graphics.Color.Yellow)
-              DayStatus.WITH_DATA -> Dot(androidx.compose.ui.graphics.Color.Green)
+            Text(
+                text = DateUtils.dateFormatForDayList(day.date),
+                color =
+                if (day.status != DayStatus.WITH_DATA)
+                    MaterialTheme.colorScheme.secondary
+                else
+                    MaterialTheme.colorScheme.primary
+            )
+
+            if (day.status == DayStatus.LOADING) {
+                CircularProgressIndicator(
+                    modifier = Modifier.then(Modifier.size(20.dp))
+                )
             }
         }
     }
