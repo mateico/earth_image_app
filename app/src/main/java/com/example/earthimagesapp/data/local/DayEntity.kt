@@ -5,5 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class DayEntity(
-    @PrimaryKey val date: String
+    @PrimaryKey val date: String,
+    val status: DayStatus
 )
