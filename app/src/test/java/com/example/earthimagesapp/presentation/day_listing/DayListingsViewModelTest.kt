@@ -1,6 +1,7 @@
 package com.example.earthimagesapp.presentation.day_listing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.earthimagesapp.domain.DayDataRepository
 import com.example.earthimagesapp.domain.model.Day
 import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +22,8 @@ class DayListingsViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
     lateinit var dayListingsViewModel: DayListingsViewModel
-    lateinit var fakeRepository: FakeEarthImagesRepository
+    lateinit var fakeRepository: FakeDayRepository
+    lateinit var fakeDateDataRepository: DayDataRepository
 
     @get:Rule
     val instantTaskExecutionRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
@@ -30,8 +32,8 @@ class DayListingsViewModelTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         Dispatchers.setMain(testDispatcher)
-        fakeRepository = FakeEarthImagesRepository()
-
+        fakeRepository = FakeDayRepository()
+        fakeDateDataRepository = FakeDataDayRepository()
 
         val daysToInsert = mutableListOf<Day>()
         ('a'..'z').forEachIndexed { index, c ->
@@ -45,7 +47,7 @@ class DayListingsViewModelTest {
             fakeRepository.insertDays(daysToInsert)
         }
 
-        //dayListingsViewModel = DayListingsViewModel(fakeRepository)
+        dayListingsViewModel = DayListingsViewModel(fakeRepository, fakeDateDataRepository)
     }
 
     @Test
@@ -54,7 +56,7 @@ class DayListingsViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         try {
-            TestCase.assertEquals(false, dayListingsViewModel.state.isRefreshing)
+            TestCase.assertEquals(false, dayListingsViewModel.uiState.value.isRefreshing)
         } finally {
             Dispatchers.resetMain()
         }
