@@ -5,12 +5,14 @@ import com.example.earthimagesapp.domain.model.Day
 
 fun DayEntity.toDay(): Day {
     return Day(
-        date = date
+        date = date,
+        status = status
     )
 }
 
 fun Day.toDayEntity(): DayEntity {
     return DayEntity(
-        date = date
+        date = date,
+        status = status
     )
 }

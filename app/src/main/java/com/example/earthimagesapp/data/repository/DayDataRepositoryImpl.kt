@@ -1,5 +1,7 @@
 package com.example.earthimagesapp.data.repository
 
+import com.example.earthimagesapp.data.local.DayEntity
+import com.example.earthimagesapp.data.local.DayStatus
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.mapper.toImageData
 import com.example.earthimagesapp.data.remote.EarthImagesApi
@@ -26,7 +28,8 @@ class DayDataRepositoryImpl @Inject constructor(
             var index = 0;
             while (index < result.size) {
                 val remoteImagesByDayListings = try {
-                    api.getImagesData("date/${result[index++].date}")
+                    db.dayDao.updateDay(DayEntity(result[index].date, DayStatus.LOADING))
+                    api.getImagesData("date/${result[index].date}")
                 } catch (e: IOException) {
                     e.printStackTrace()
                     null
@@ -42,6 +45,8 @@ class DayDataRepositoryImpl @Inject constructor(
                     imageDataDao.insertImagesByDayListing(
                         imageByDayListings.map { it.toImageDataEntity() }
                     )
+                    db.dayDao.updateDay(DayEntity(result[index].date, DayStatus.WITH_DATA))
+                    index++
                 }
             }
         }

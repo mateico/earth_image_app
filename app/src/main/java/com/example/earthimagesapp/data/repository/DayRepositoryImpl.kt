@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class DayRepositoryImpl @Inject constructor(
-    private val db: EarthImagesDatabase,
+    db: EarthImagesDatabase,
     private val api: EarthImagesApi
 ): DayRepository {
 
@@ -23,12 +23,12 @@ class DayRepositoryImpl @Inject constructor(
         dayDao.getDaysStream().map { entityDays ->
             entityDays.map { it.toDay() }
         }.onEach {
-            if (it.isEmpty()) getDaysFromRemote()
+            if (it.isEmpty())
+                getDaysFromRemote()
         }
 
     override suspend fun getDaysFromRemote() {
         api.getDays()
-            .shuffled()
             .also { dayDtos ->
                 dayDao.insertOrIgnoreDays(days = dayDtos.map(DayDto::toDayEntity))
             }
