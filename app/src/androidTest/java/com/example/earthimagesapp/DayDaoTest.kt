@@ -5,9 +5,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.earthimagesapp.data.local.DayDao
+import com.example.earthimagesapp.data.local.DayStatus
 import com.example.earthimagesapp.data.local.EarthImagesDatabase
 import com.example.earthimagesapp.data.mapper.toDayEntity
 import com.example.earthimagesapp.domain.model.Day
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -34,13 +36,13 @@ class DayDaoTest {
 
     @Test
     fun insertDay_returnsTrue() = runBlocking {
-        val day = Day("20220-03-22")
+        val day = Day("20220-03-22", DayStatus.EMPTY)
         dayDao.insertOrIgnoreDays(listOf(day.toDayEntity()))
 
 
         val result = dayDao.getDaysStream()
 
-        assertEquals(result.size, 1)
+        assertEquals(result.count(), 1)
 
 
     }
