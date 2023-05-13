@@ -1,6 +1,7 @@
 package com.example.earthimagesapp.presentation.day_listing
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.earthimagesapp.data.local.DayStatus
 import com.example.earthimagesapp.domain.DayDataRepository
 import com.example.earthimagesapp.domain.model.Day
 import junit.framework.TestCase
@@ -39,7 +40,8 @@ class DayListingsViewModelTest {
         ('a'..'z').forEachIndexed { index, c ->
             daysToInsert.add(
                 Day(
-                    date = "date $c"
+                    date = "date $c",
+                    DayStatus.EMPTY
                 )
             )
         }
