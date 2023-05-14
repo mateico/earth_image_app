@@ -3,6 +3,16 @@ name: Android Build
 on: pull_request
 
 jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v1
+
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
   build:
 
     runs-on: ubuntu-latest
