@@ -4,14 +4,14 @@ on: pull_request
 
 jobs:
 
-  lint:
+  detekt:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v1
 
       - name: Run Lint
-        run: ./gradlew lintDebug
+        run: ./gradlew detekt
 
   build:
 
