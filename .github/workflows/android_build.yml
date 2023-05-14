@@ -7,11 +7,11 @@ jobs:
   detekt:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v1
+      - name: "checkout"
+        uses: actions/checkout@v2
 
-      - name: Run Lint
-        run: ./gradlew detekt
+      - name: "detekt"
+        uses: natiginfo/action-detekt-all@1.22.0
 
   build:
 
