@@ -58,7 +58,7 @@ class DayListingsViewModelTest {
         Dispatchers.setMain(testDispatcher)
 
         try {
-            TestCase.assertEquals(false, dayListingsViewModel.uiState.value.isRefreshing)
+            TestCase.assertEquals(false, dayListingsViewModel.dayScreeState.value.isRefreshing)
         } finally {
             Dispatchers.resetMain()
         }

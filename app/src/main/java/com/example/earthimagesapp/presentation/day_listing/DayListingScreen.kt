@@ -26,7 +26,7 @@ fun DayListingScreen(
 ) {
 
     val snackBarHostState = remember { SnackbarHostState() }
-    val uiState: DayListingState by viewModel.uiState.collectAsState()
+    val uiState: DayScreeState by viewModel.dayScreeState.collectAsState()
     val errorMessage = stringResource(id = R.string.error_text)
     val okText = stringResource(id = R.string.ok_button_text)
 
@@ -67,24 +67,24 @@ fun DayListingScreen(
 }
 
 @Composable
-fun DayList(uiState: DaysUiState, navController: NavController) {
+fun DayList(uiState: DayListState, navController: NavController) {
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
 
     ) {
         when (uiState) {
-            DaysUiState.Error -> {
+            DayListState.Error -> {
                 homeSectionErrorText(R.string.section_error_days)
             }
 
-            DaysUiState.Loading -> {
+            DayListState.Loading -> {
                 item {
                     LoadingIndicator()
                 }
             }
 
-            is DaysUiState.Success -> {
+            is DayListState.Success -> {
                 items(uiState.days.size) { i ->
                     val day = uiState.days[i]
                     DayItem(

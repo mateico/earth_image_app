@@ -19,17 +19,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class DayListingState(
-    val days: DaysUiState,
+data class DayScreeState(
+    val days: DayListState,
     val isRefreshing: Boolean,
     val isError: Boolean
 )
 
 @Immutable
-sealed interface DaysUiState {
-    data class Success(val days: List<Day>) : DaysUiState
-    object Error : DaysUiState
-    object Loading : DaysUiState
+sealed interface DayListState {
+    data class Success(val days: List<Day>) : DayListState
+    object Error : DayListState
+    object Loading : DayListState
 }
 
 @HiltViewModel
@@ -49,29 +49,31 @@ class DayListingsViewModel @Inject constructor(
     private val isError = MutableStateFlow(false)
 
 
-    val uiState: StateFlow<DayListingState> = combine(
+    // combining the streams of days, isRefreshing and isError
+    val dayScreeState: StateFlow<DayScreeState> = combine(
         days,
         isRefreshing,
         isError
     ) { daysResult, isRefreshing, isError ->
 
-        val days: DaysUiState = when (daysResult) {
-            is Result.Success -> DaysUiState.Success(daysResult.data)
-            is Result.Loading -> DaysUiState.Loading
-            is Result.Error -> DaysUiState.Error
+        val dayListState: DayListState = when (daysResult) {
+            is Result.Success -> DayListState.Success(daysResult.data)
+            is Result.Loading -> DayListState.Loading
+            is Result.Error -> DayListState.Error
         }
 
-        DayListingState(
-            days,
+        DayScreeState(
+            dayListState,
             isRefreshing,
             isError
         )
 
+        // to convert the combined data flow to stateflow I use stateIn
     }.stateIn(
         scope = viewModelScope,
-        started = WhileUiSubscribed,
-        initialValue = DayListingState(
-            DaysUiState.Loading,
+        started = WhileUiSubscribed, // only one collector and wait 5 sec to restart after there are no connections
+        initialValue = DayScreeState(
+            DayListState.Loading,
             isRefreshing = false,
             isError = false
         )
