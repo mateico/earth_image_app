@@ -7,6 +7,8 @@ plugins {
     id 'kotlin-kapt'
 }
 
+apply from: '../config/detekt/detekt.gradle'
+
 android {
     namespace 'com.example.earthimagesapplication'
     compileSdk 33

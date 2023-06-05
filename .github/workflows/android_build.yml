@@ -3,6 +3,18 @@ name: Android Build
 on: pull_request
 
 jobs:
+
+#  detekt:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: "checkout"
+#        uses: actions/checkout@v2
+#
+#      - name: "detekt"
+#        uses: natiginfo/action-detekt-all@1.22.0
+#        with:
+#          args: --fail-fast --config detekt.yml
+
   build:
 
     runs-on: ubuntu-latest
